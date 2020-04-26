@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:checked="true"
+            android:title="홈"
+            android:icon="@drawable/home"
+            />
+        <item
+            android:id="@+id/nav_user"
+            android:checked="true"
+            android:title="사용자 설정"
+            android:icon="@drawable/person"
+            />
+        <item
+            android:id="@+id/nav_mycar"
+            android:checked="true"
+            android:title="내 차량 관리"
+            android:icon="@drawable/system"
+            />
+        <item
+            android:id="@+id/nav_setting"
+            android:checked="true"
+            android:title="환경 설정"
+            android:icon="@drawable/system"
+        />
+
+    </group>
+</menu>

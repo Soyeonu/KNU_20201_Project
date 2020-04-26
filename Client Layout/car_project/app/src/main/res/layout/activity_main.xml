@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="#f2f2f2">
+
+    <ImageView
+        android:id="@+id/carImg"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/car_img"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.2"
+        />
+
+    <TextView
+        android:id="@+id/text_ccis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:text="CCIS"
+        android:textSize="80sp"
+        android:textStyle="bold"
+        android:textColor="#2F5597"
+        android:shadowColor="#4c535e"
+        android:shadowRadius="10"
+        android:shadowDx="10.0"
+        android:shadowDy="10.0"
+        app:layout_constraintBottom_toTopOf="@id/carImg"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintHorizontal_bias="0.4"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:text="for Client"
+        android:textSize="30sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_ccis"
+        app:layout_constraintHorizontal_bias="0.9"
+        />
+
+    <Button
+        android:id="@+id/signInBtn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="[ ]로 시작"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        android:background="@drawable/round_btn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.7"
+        android:onClick="onClickSign"/>
+
+    <Button
+        android:id="@+id/signUpBtn"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="새 차량에 등록"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:background="@drawable/round_btn"
+        app:layout_constraintTop_toBottomOf="@id/signInBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:onClick="onClickSign"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

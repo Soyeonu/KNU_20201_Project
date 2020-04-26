@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignIn">
+
+    <TextView
+        android:id="@+id/text_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="  ID : "
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        app:layout_constraintHorizontal_bias="0.25"
+        />
+    <EditText
+        android:id="@+id/id"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/text_id"
+        app:layout_constraintLeft_toRightOf="@id/text_id"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:autofillHints="아이디를 입력하세요" />
+
+    <TextView
+        android:id="@+id/text_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PW : "
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/text_id"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintHorizontal_bias="0.25"
+        android:layout_marginTop="25dp"
+        />
+    <EditText
+        android:id="@+id/pw"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/text_pw"
+        app:layout_constraintLeft_toRightOf="@id/text_pw"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:autofillHints="비밀번호를 입력하세요" />
+
+    <CheckBox
+        android:id="@+id/autoCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="자동 로그인"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/pw"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <Button
+        android:id="@+id/loginBtn"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_btn"
+        android:text="로그인"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.65"
+        android:onClick="onClickLogin"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
