@@ -19,7 +19,7 @@ public class Permission {
         this.FunctionList.remove(function);
     }
 
-    public boolean isExistFunction(Function function){
+    public boolean CheckPermission(Function function){
         if(this.FunctionList.contains(function)) return true;
         return false;
     }

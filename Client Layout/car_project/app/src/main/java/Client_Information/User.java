@@ -19,4 +19,5 @@ public class User {
         Registration NewReg = new Registration(MasterID, Expiredate);
         this.RegList.add(NewReg);
     }
+
 }
