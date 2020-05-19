@@ -77,7 +77,6 @@ public class DbOpenHelper {
     //INSERT
     public long insert(String id, String pwd, String phone, String auth) {
         ContentValues contentValues = new ContentValues();
-
         contentValues.put(Databases.CreateDB.USERID, id);
         contentValues.put(Databases.CreateDB.PWD, pwd);
         contentValues.put(Databases.CreateDB.PHONENUM, phone);
@@ -96,7 +95,7 @@ public class DbOpenHelper {
 
     public int Isthere(String x, String y){
         String s = null;
-        String query = "SELECT * FROM " + Databases.CreateDB._TABLENAME0 + " WHERE USERID = '" + x +"' AND PWD = '" + y + "'";
+        String query = "SELECT * FROM " + Databases.CreateDB._TABLENAME0 + " WHERE USERID = "+ "\"" + x +"\""+"AND PWD = '" + y + "'";
         System.out.println("========"+query);
         Cursor res = mDB.rawQuery(query, null);
         while (res.moveToNext()) {
@@ -105,6 +104,12 @@ public class DbOpenHelper {
         }
         if(s!=null) return 1;
         else return 0;
+    }
+
+    public void deleteAllData(String query)
+    {
+        mDB.execSQL(query + Databases.CreateDB._TABLENAME0);
+        getAllData();
     }
 
 }

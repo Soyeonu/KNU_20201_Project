@@ -12,10 +12,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button register, login;
+    Button register, login, dbdelete;
 
     EditText id, pwd;
     CheckBox autologin;
@@ -51,9 +52,11 @@ public class MainActivity extends AppCompatActivity {
         autologin=findViewById(R.id.checklogin);
         register = findViewById(R.id.register);
         login = findViewById(R.id.login);
+        dbdelete = findViewById(R.id.DBdelete);
 
         register.setOnClickListener(onClickListener);
         login.setOnClickListener(onClickListener);
+        dbdelete.setOnClickListener(onClickListener);
 
         //preference에 저장된 내용들 중 AutoLogin 부분이 true이면 자동로그인 중임을 의미
         // logout.class 로 전환 됨
@@ -62,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, logout.class);
             startActivity(intent);
         }
+
+        dbOpenHelper.getAllData();
 
     }
 
@@ -79,21 +84,30 @@ public class MainActivity extends AppCompatActivity {
                     //입력된 id, pwd를 가져옴
                     String ID = id.getText().toString();
                     String PWD = pwd.getText().toString();
-                    //자동 로그인 유무를 판단
+                    //디비 유무 판단
                     if(dbOpenHelper.Isthere(ID,PWD)==1) {
-                        editor.putString("ID",ID);
+                        editor.putString("ID", ID);
                         editor.putString("PWD", PWD);
                         if (autologin.isChecked() == true)
                             // 자동 로그인 선택 후, 로그인 버튼을 누르면 자동로그인 설정됨
                             editor.putBoolean("AutoLogin", true);
                         editor.commit();
+
+                        //로그인 후, 무조건 로그아웃 화면으로 넘어간다.
+                        intent = new Intent(MainActivity.this, logout.class);
+                        startActivity(intent);
                     }
 
-
-                    //로그인 후, 무조건 로그아웃 화면으로 넘어간다.
-                    intent = new Intent(MainActivity.this, logout.class);
-                    startActivity(intent);
+                    else Toast.makeText(getApplicationContext(),"Please Register", Toast.LENGTH_LONG).show();
                     break;
+                case R.id.DBdelete:
+                    dbOpenHelper.deleteAllData("DELETE FROM ");
+                    Toast check = Toast.makeText(getApplicationContext(), "Delete All data in DB", Toast.LENGTH_SHORT);
+                    check.show();
+                    System.out.println("-----------------------------------");
+                    dbOpenHelper.getAllData();
+                    break;
+
             }
         }
     };

@@ -71,7 +71,7 @@ public class LoginRegister extends AppCompatActivity {
 
                     dbOpenHelper.insert(id, pwd, phone, authority);
                     dbOpenHelper.getAllData();
-                    dbOpenHelper.close();
+                    finish();
                     break;
             }
 
