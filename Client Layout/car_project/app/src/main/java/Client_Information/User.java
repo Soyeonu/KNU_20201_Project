@@ -1,5 +1,7 @@
 package Client_Information;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 
