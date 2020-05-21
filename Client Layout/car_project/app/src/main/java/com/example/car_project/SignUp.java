@@ -72,6 +72,8 @@ public class SignUp extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(getApplicationContext(), "회원가입 완료! 로그인을 진행해 주세요!",Toast.LENGTH_SHORT).show();
                             //FirebaseUser user = firebaseAuth.getCurrentUser(); 자동로그인
+                            Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                            startActivity(intent);
                         }
                         else { //회원가입 조건에 충족하지 않음.
 
@@ -86,7 +88,6 @@ public class SignUp extends AppCompatActivity {
         */
         //데이터 입력 테스트
 
-        Intent intent = new Intent(getApplicationContext(), SignIn.class);
-        startActivity(intent);
+
     }
 }
