@@ -16,20 +16,31 @@
             android:background="@drawable/person"
             android:layout_gravity="center"
             />
+
         <TextView
             android:id="@+id/user_name"
-            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:paddingVertical="40dp"
+            android:layout_height="wrap_content"
             android:paddingHorizontal="20dp"
+            android:paddingVertical="40dp"
             android:text="홍길동의 차량"
-            android:textSize="20sp"
-            android:textStyle="bold"
             android:textColor="#ffffff"
-            />
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <TextView
+        android:id="@+id/user_masterid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:paddingBottom="20dp"
+        android:text="보유차량: "
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/user_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="~~@.com"
@@ -37,13 +48,30 @@
         android:textColor="#ffffff"
         android:paddingHorizontal="20dp"
         />
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/invisible_email"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="보유차량: "
-        android:textSize="16sp"
-        android:textColor="#ffffff"
-        android:paddingHorizontal="20dp"
-        android:paddingBottom="20dp"
-        />
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/invisible_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/invisible_masterid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/invisible_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+
 </LinearLayout>

@@ -37,14 +37,22 @@ public class SignIn extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         Fdatabase = FirebaseDatabase.getInstance().getReference();
     }
-
+/*
     public void onStart(){
         super.onStart();
         //유저가 이미 접속중인지 확인(추가?)
         FirebaseUser current_user = firebaseAuth.getCurrentUser();
-        if (current_user != null)//현재 사용자가 로그인 중이면
-            firebaseAuth.signOut();
-    }
+        if (current_user == null) {
+            // User is signed in.
+            String email = current_user.getEmail();
+            Toast.makeText(getApplicationContext(), email, Toast.LENGTH_SHORT).show();
+            //firebaseAuth.signOut();
+        } else {
+            // No user is signed in.
+            Toast.makeText(getApplicationContext(), "not any one", Toast.LENGTH_SHORT).show();
+        }
+
+    }*/
 
     public void onClickLogin(View v){
         int id = v.getId();
@@ -61,7 +69,7 @@ public class SignIn extends AppCompatActivity {
                 pwd = eTextPw.getText().toString().trim();
                 if(email.equals("") || email == null)
                 {
-                    Toast.makeText(getApplicationContext(), "ID를 채워주세요!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Email을 채워주세요!", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 if(pwd.equals("") || pwd == null)
@@ -86,23 +94,21 @@ public class SignIn extends AppCompatActivity {
                                 if (task.isSuccessful()){                // 로그인 성공 하면 차 기능으로 넘어가기.
                                     Toast.makeText(getApplicationContext(), "인증 성공!", Toast.LENGTH_SHORT).show();
                                     //FirebaseUser user = firebaseAuth.getCurrentUser();
+
                                     Log.d(TAG, eTextId.getText().toString());
                                     Intent intent = new Intent(getApplicationContext(), car_func.class);
+                                    finish();
                                     startActivity(intent);
                                 } else {
                                     Toast.makeText(getApplicationContext(), "인증 실패!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, eTextId.getText().toString());
                                 }
-                                /*
-                                // [START_EXCLUDE]
-                                if (!task.isSuccessful()) {
-                                    mStatusTextView.setText(R.string.auth_failed);
-                                }
-                                hideProgressDialog();
-                                // [END_EXCLUDE]*/
                             }
                         });
                 break;
         }
     }
+
+
+
 }
