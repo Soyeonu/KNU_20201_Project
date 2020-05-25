@@ -4,8 +4,8 @@ public class fb_message {
     //마스터에게 메시지를 보내기 위한 객체
 
     public String mid=null;      //수신자
-    public String func=null;     //air_temp, seatbelt, air_power, play_media
-    public String order=null;    //update,update,1/0,???
+    public String func=null;     //air_temp, air_power,seatbelt, play_media
+    public String order=null;    //update,1/0,update,???
 
     public fb_message()
     {}
@@ -32,4 +32,10 @@ public class fb_message {
         return this.order;
     }
 
+
+    public boolean send()
+    {//send msg here
+        return true;
+
+    }
 }

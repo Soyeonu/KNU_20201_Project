@@ -16,13 +16,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
-import FB_obj.fb_user_permission;
 
 /*
 초안 제작용 테스트 클래스
@@ -45,10 +41,6 @@ public class mid_select  extends AppCompatActivity {
     Button connect_btn;
 
     HashMap<String,Object> mid_hashmap;
-    HashMap<String,Object> auth_hashmap;
-
-    fb_user_permission permission;
-
 
     private static final String TAG = "mid_select";
 
@@ -67,14 +59,13 @@ public class mid_select  extends AppCompatActivity {
         connect_btn = (Button)findViewById(R.id.connect_button);
 
         mid_hashmap = new HashMap<>();
-        auth_hashmap = new HashMap<>();
+
         fb_login_listener();        //마스터의 로그인 확인을 위한 리스너
-        fb_auth_listener();        //유저 보유 권한을 가지고 intent로 던져줌
     }
 
     public void fb_login_listener()
     {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("master_login");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("master_info");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -110,7 +101,7 @@ public class mid_select  extends AppCompatActivity {
         Log.d(TAG, "map method : "+mid_hashmap);
     }
 
-
+    /*
     public void fb_auth_listener()
     {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
@@ -134,7 +125,7 @@ public class mid_select  extends AppCompatActivity {
             }
         });
     }
-/*
+
     public void create_authmap(String Mid, String Bit)
     {
         //settext
@@ -148,7 +139,6 @@ public class mid_select  extends AppCompatActivity {
         mid_hashmap.put(mid,bitstring);
         Log.d(TAG, "map method : "+mid_hashmap);
     }*/
-
 
     public void connect_next(View v)
     { //해당차량이 db에 존재하는가?
