@@ -15,8 +15,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,6 +32,10 @@ public class SignIn extends AppCompatActivity {
     private DatabaseReference Freference;
     private static final String TAG = "SignIn";
 
+    String test;
+
+    private User user;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,10 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         firebaseAuth = FirebaseAuth.getInstance();
         Freference = FirebaseDatabase.getInstance().getReference();
+
+        user = new User();
+
+        test_listener();
     }
 /*
     public void onStart(){
@@ -65,6 +71,7 @@ public class SignIn extends AppCompatActivity {
         String id_input=null;
         String pwd_input=null;
         final String TAG = "SignIn";
+
 
         switch(id){
             case R.id.loginBtn:
@@ -92,7 +99,8 @@ public class SignIn extends AppCompatActivity {
                     System.out.println("Auto Checked");
                 }
                  */
-                firebaseAuth.signInWithEmailAndPassword(id_input+"@test.com", pwd_input)
+                final String finalId_input = id_input;
+                firebaseAuth.signInWithEmailAndPassword(id_input+"@google.com", pwd_input)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -102,6 +110,7 @@ public class SignIn extends AppCompatActivity {
 
                                     Log.d(TAG, eTextId.getText().toString());
                                     Intent intent = new Intent(getApplicationContext(), mid_select.class);
+                                    intent.putExtra("uid", finalId_input);
                                     finish();
                                     startActivity(intent);
                                 } else {
@@ -112,5 +121,29 @@ public class SignIn extends AppCompatActivity {
                         });
                 break;
         }
+        Log.v(TAG, "in button + " + user.get_profile().get_username());
+    }
+
+    public void test_listener() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data").child("test");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
+                    //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
+                    //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
+                    if (dataSnapshot != null)
+                    {
+                        Log.v(TAG, "in listener + " + dataSnapshot.getKey()); //displays the key for the node
+                        User userinfo = dataSnapshot.getValue(User.class);
+                        test = userinfo.get_userid();
+                        user = userinfo;
+                        Log.v(TAG," + " + userinfo );
+                    }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

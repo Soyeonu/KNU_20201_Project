@@ -12,24 +12,34 @@ public class Function {
     //Master Side의 Device 클래스 안에 해당 내용을 선언할 필요가 있다.
     //Owner가 권한을 부여하려면 부여할 수 있는 모든 권한의 List가 존재해야 한다. (단순 목록이므로 별도 보관만 필요)
     //***********************************
-    private String Name;
-    private String DeviceNum;
-    private String Message;
+    public String Name;
+    public String DeviceNum;
+    public String Message;
 
-    Function(String name, String DeviceNum){
+    public Function()
+    {}
+
+    public Function(String name, String DeviceNum){
         this.Name = name;
         this.DeviceNum = DeviceNum;
     }
 
-    public void setMessage(String Msg){
+    public Function(String name,String devicenum, String message)
+    {
+        this.Name = name;
+        this.DeviceNum = devicenum;
+        this.Message =message;
+    }
+
+    public void set_message(String Msg){
         this.Message = Msg;
     }
 
-    public String getMessage(){
+    public String get_message(){
         return this.Message;
     }
 
-    public String getDevNum(){
+    public String get_devnum(){
         return this.DeviceNum;
     }
 

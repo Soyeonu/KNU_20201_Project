@@ -34,6 +34,7 @@ import org.w3c.dom.Text;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import Client_Information.User;
 import FB_obj.fb_user_profile;
 
 public class car_func extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -53,24 +54,14 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     DatabaseReference Freference;//데이터베이스 접근용
     String username;
     String useremail;
+    String userid;
 
     TextView header_name;
     TextView header_email;
     TextView header_masterid;
-    //////////////////fb 리스너 비동기 정보를 가져오기 위한 투명 텍스트뷰
-    TextView fb_userid;
-    TextView fb_userpwd;
-    TextView fb_username;
-    TextView fb_useremail;
-    TextView fb_userphone;
 
-    TextView fb_masterid;
-    TextView fb_airtemp;
-    TextView fb_airpower;
-    TextView fb_seatbelt;
-    TextView fb_playmedia;
-    TextView fb_loginbit;
     //////////////////
+    private User user;
 
 
     @Override
@@ -97,6 +88,10 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         navView.setItemIconTintList(null);
         fm = getSupportFragmentManager();
 
+        Intent intent = getIntent();
+        userid = intent.getExtras().getString("uid");
+        Log.v(TAG, "oncreate userid : " + userid);
+
         firebaseAuth = FirebaseAuth.getInstance();
         Freference = FirebaseDatabase.getInstance().getReference();
         //유저가 로그인 하지 않은 상태라면 null 상태이고 이 액티비티를 종료하고 로그인 액티비티를 연다.
@@ -107,57 +102,34 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
 
         //유저가 있다면, null이 아니면 계속 진행
         FirebaseUser fbuser = firebaseAuth.getCurrentUser();
-        Toast.makeText(getApplicationContext(),"반갑습니다.\n"+ fbuser.getEmail()+"으로 로그인 하였습니다.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),"반갑습니다.\n"+ userid +"으로 로그인 하였습니다.", Toast.LENGTH_SHORT).show();
 
         View header = navView.getHeaderView(0);
         header_name = (TextView)header.findViewById(R.id.user_name);
         header_email = (TextView)header.findViewById(R.id.user_email);
 
-        fb_userid = (TextView)findViewById(R.id.fb_uid);
-        fb_userpwd = (TextView)findViewById(R.id.fb_pwd);
-        fb_username = (TextView)header.findViewById(R.id.fb_name);
-        fb_useremail = (TextView)header.findViewById(R.id.fb_email);
-        fb_userphone = (TextView)header.findViewById(R.id.fb_phone);
+        user = new User();
 
-        fb_masterid = (TextView)findViewById(R.id.fb_mid);
-        fb_airtemp = (TextView)findViewById(R.id.fb_airtemp);
-        fb_airpower = (TextView)findViewById(R.id.fb_airpower);
-        fb_seatbelt = (TextView)findViewById(R.id.fb_seatbelt);
-        fb_playmedia = (TextView)findViewById(R.id.fb_playmedia);
-        fb_loginbit = (TextView)findViewById(R.id.fb_loginbit);
-
-        fb_userprofile_listener();     //사용자 정보를 업데이트를 위한 리스너
+        fb_userdata_listener();     //사용자 정보를 업데이트를 위한 리스너
         //fb_masterinfo_listener();     //마스터 정보를 받기 위한 리스너
     }
 
-    public void fb_userprofile_listener() {
-        useremail = firebaseAuth.getCurrentUser().getEmail();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_profile");
+    public void fb_userdata_listener() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data").child(userid);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
-                    //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
-                    //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
-                    if (childDataSnapshot != null)
-                    {
-                        String fb_id = childDataSnapshot.child("id").getValue()+"@test.com";
-                        if(useremail.equals(fb_id))
-                        {
-                            HashMap<String,Object> InputMap = new HashMap<>();
-                            String id = (String) childDataSnapshot.child("id").getValue();
-                            String pwd = (String) childDataSnapshot.child("pwd").getValue();
-                            String email = (String) childDataSnapshot.child("email").getValue();
-                            String name = (String) childDataSnapshot.child("name").getValue();
-                            String phone = (String) childDataSnapshot.child("phone").getValue();
-                            fb_user_profile profile = new fb_user_profile(id,pwd,name,email,phone);
+                //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
+                //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
+                //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
+                if (dataSnapshot != null)
+                {
+                    Log.v(TAG, "in listener + " + dataSnapshot.getKey()); //displays the key for the node
+                    User userinfo = dataSnapshot.getValue(User.class);
+                    user = userinfo;
+                    Log.v(TAG," + " + userinfo);
 
-                            InputMap = (HashMap<String, Object>) profile.toMap();
-                            set_fb_TextViews(InputMap);
-                            set_TextViews(InputMap);
-                        }
-                    }
+                    set_TextViews();
                 }
             }
             @Override
@@ -165,7 +137,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
     }
-
+/*
     public void set_fb_TextViews(HashMap<String,Object> Input) {
         Log.v(TAG, "set_TextViews : " + Input.values());
 
@@ -175,12 +147,13 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         fb_useremail.setText((String) Input.get("email"));
         fb_userphone.setText((String) Input.get("phone"));
     }
+    */
 
-    public void set_TextViews(HashMap<String,Object> Input)
+    public void set_TextViews()
     {
-        Log.v(TAG, "set_TextViews : " + Input.values());
-        header_name.setText((String) Input.get("name"));
-        header_email.setText((String) Input.get("email"));
+        Log.v(TAG,"setTextview - username : " + user.get_profile().get_username());
+        header_name.setText(user.get_profile().get_username());
+        header_email.setText(user.get_profile().get_email());
     }
 
     @Override

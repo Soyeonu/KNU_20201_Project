@@ -19,7 +19,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import Client_Information.Function;
+import Client_Information.Permission;
+import Client_Information.Profile;
+import Client_Information.Registration;
+import Client_Information.User;
 import FB_obj.fb_user_profile;
 
 public class SignUp extends AppCompatActivity {
@@ -71,7 +77,7 @@ public class SignUp extends AppCompatActivity {
         String email = user_email.getText().toString().trim();
         String phone = user_phone.getText().toString().trim();
 
-        String fb_id = id+"@test.com";
+        String fb_id = id+"@google.com";
 
         if(id.equals("") || id == null)
         {
@@ -99,9 +105,25 @@ public class SignUp extends AppCompatActivity {
             return;
         }
 
-        fb_user_profile profile = new fb_user_profile(id,pwd,name,email,phone);
 
-        if (profile.update()) {
+        Profile profile  = new Profile(name,email,phone);
+/*
+        Function func1 = new Function("func1","DevNum","Message");
+        Function func2 = new Function("func2","DevNum","Message");
+        ArrayList<Function> funclist = new ArrayList<Function>();
+        funclist.add(func1);
+        funclist.add(func2);
+        Permission perm = new Permission("uid",funclist);
+
+        ArrayList<Registration> reg = new ArrayList<Registration>();
+        Registration data1 = new Registration("mid1","2020/09/05",false,perm,true,true);
+        Registration data2 = new Registration("mid1","2020/12/12",false,perm,true,true);
+        reg.add(data1);
+        reg.add(data2);
+*/
+        User newUser = new User(id,pwd,profile);
+
+        if (newUser.update()) {
             firebaseAuth.createUserWithEmailAndPassword(fb_id, pwd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
