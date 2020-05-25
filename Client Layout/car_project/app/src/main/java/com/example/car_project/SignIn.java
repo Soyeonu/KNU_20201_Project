@@ -16,8 +16,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import Client_Information.*;
 
@@ -27,7 +31,8 @@ public class SignIn extends AppCompatActivity {
     private EditText eTextPw;
     private CheckBox autoLogin;
     FirebaseAuth firebaseAuth;
-    private DatabaseReference Fdatabase;
+    private DatabaseReference Freference;
+    private static final String TAG = "SignIn";
 
 
     @Override
@@ -35,7 +40,7 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         firebaseAuth = FirebaseAuth.getInstance();
-        Fdatabase = FirebaseDatabase.getInstance().getReference();
+        Freference = FirebaseDatabase.getInstance().getReference();
     }
 /*
     public void onStart(){
@@ -57,27 +62,27 @@ public class SignIn extends AppCompatActivity {
     public void onClickLogin(View v){
         int id = v.getId();
         //Intent it;
-        String email=null;
-        String pwd=null;
+        String id_input=null;
+        String pwd_input=null;
         final String TAG = "SignIn";
 
         switch(id){
             case R.id.loginBtn:
                 eTextId = findViewById(R.id.id);
                 eTextPw = findViewById(R.id.pw);
-                email = eTextId.getText().toString().trim();
-                pwd = eTextPw.getText().toString().trim();
-                if(email.equals("") || email == null)
+                id_input = eTextId.getText().toString().trim();
+                pwd_input = eTextPw.getText().toString().trim();
+                if(id_input.equals("") || id_input == null)
                 {
-                    Toast.makeText(getApplicationContext(), "Email을 채워주세요!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "ID를 채워주세요!", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                if(pwd.equals("") || pwd == null)
+                if(pwd_input.equals("") || pwd_input == null)
                 {
                     Toast.makeText(getApplicationContext(), "비밀번호를 채워주세요!", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                pwd = eTextPw.getText().toString().trim();
+
                 System.out.println("id: = " + eTextId.getText().toString() + " pw: = " + eTextPw.getText().toString());
                 //eTextId와 eTextPw에 id와 pw
                 /*
@@ -87,7 +92,7 @@ public class SignIn extends AppCompatActivity {
                     System.out.println("Auto Checked");
                 }
                  */
-                firebaseAuth.signInWithEmailAndPassword(email, pwd)
+                firebaseAuth.signInWithEmailAndPassword(id_input+"@test.com", pwd_input)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -108,7 +113,4 @@ public class SignIn extends AppCompatActivity {
                 break;
         }
     }
-
-
-
 }

@@ -50,7 +50,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
 
     /////////////////
     FirebaseAuth firebaseAuth;//사용자 인증확인용
-    DatabaseReference Fdatabase;//데이터베이스 접근용
+    DatabaseReference Freference;//데이터베이스 접근용
     String username;
     String useremail;
 
@@ -58,10 +58,18 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     TextView header_email;
     TextView header_masterid;
     //////////////////fb 리스너 비동기 정보를 가져오기 위한 투명 텍스트뷰
+    TextView fb_userid;
+    TextView fb_userpwd;
     TextView fb_username;
     TextView fb_useremail;
     TextView fb_userphone;
-    TextView fb_usermasterid;
+
+    TextView fb_masterid;
+    TextView fb_airtemp;
+    TextView fb_airpower;
+    TextView fb_seatbelt;
+    TextView fb_playmedia;
+    TextView fb_loginbit;
     //////////////////
 
 
@@ -90,7 +98,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         fm = getSupportFragmentManager();
 
         firebaseAuth = FirebaseAuth.getInstance();
-        Fdatabase = FirebaseDatabase.getInstance().getReference();
+        Freference = FirebaseDatabase.getInstance().getReference();
         //유저가 로그인 하지 않은 상태라면 null 상태이고 이 액티비티를 종료하고 로그인 액티비티를 연다.
         if(firebaseAuth.getCurrentUser() == null) {
             finish();
@@ -104,22 +112,27 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         View header = navView.getHeaderView(0);
         header_name = (TextView)header.findViewById(R.id.user_name);
         header_email = (TextView)header.findViewById(R.id.user_email);
-        header_masterid = (TextView)header.findViewById(R.id.user_masterid);
 
-        fb_username = (TextView)header.findViewById(R.id.invisible_name);
-        fb_useremail = (TextView)header.findViewById(R.id.invisible_email);
-        fb_userphone = (TextView)header.findViewById(R.id.invisible_phone);
-        fb_usermasterid = (TextView)header.findViewById(R.id.invisible_masterid);
+        fb_userid = (TextView)findViewById(R.id.fb_uid);
+        fb_userpwd = (TextView)findViewById(R.id.fb_pwd);
+        fb_username = (TextView)header.findViewById(R.id.fb_name);
+        fb_useremail = (TextView)header.findViewById(R.id.fb_email);
+        fb_userphone = (TextView)header.findViewById(R.id.fb_phone);
 
-        fb_userdata_listener();     //사용자 정보를 업데이트를 위한 리스너
+        fb_masterid = (TextView)findViewById(R.id.fb_mid);
+        fb_airtemp = (TextView)findViewById(R.id.fb_airtemp);
+        fb_airpower = (TextView)findViewById(R.id.fb_airpower);
+        fb_seatbelt = (TextView)findViewById(R.id.fb_seatbelt);
+        fb_playmedia = (TextView)findViewById(R.id.fb_playmedia);
+        fb_loginbit = (TextView)findViewById(R.id.fb_loginbit);
+
+        fb_userprofile_listener();     //사용자 정보를 업데이트를 위한 리스너
         //fb_masterinfo_listener();     //마스터 정보를 받기 위한 리스너
-
-        //Log.v(TAG, "oncreate header name : "+ header_name.toString());
     }
 
-    public void fb_userdata_listener() {
+    public void fb_userprofile_listener() {
         useremail = firebaseAuth.getCurrentUser().getEmail();
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_profile");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -129,19 +142,20 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
                     //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
                     if (childDataSnapshot != null)
                     {
-                        if(useremail.equals(childDataSnapshot.child("email").getValue()))
+                        String fb_id = childDataSnapshot.child("id").getValue()+"@test.com";
+                        if(useremail.equals(fb_id))
                         {
                             HashMap<String,Object> InputMap = new HashMap<>();
+                            String id = (String) childDataSnapshot.child("id").getValue();
+                            String pwd = (String) childDataSnapshot.child("pwd").getValue();
                             String email = (String) childDataSnapshot.child("email").getValue();
                             String name = (String) childDataSnapshot.child("name").getValue();
                             String phone = (String) childDataSnapshot.child("phone").getValue();
-                            String masterid= (String) childDataSnapshot.child("mid").getValue();//이 경우 intent로 차량의 mid를 받았다고 가정해야 함.
-                            fb_user_profile profile = new fb_user_profile(email,name,phone,masterid);
+                            fb_user_profile profile = new fb_user_profile(id,pwd,name,email,phone);
 
                             InputMap = (HashMap<String, Object>) profile.toMap();
-                            set_invisible_TextViews(InputMap);
+                            set_fb_TextViews(InputMap);
                             set_TextViews(InputMap);
-
                         }
                     }
                 }
@@ -152,25 +166,21 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         });
     }
 
-    public void set_invisible_TextViews(HashMap<String,Object> Input) {
+    public void set_fb_TextViews(HashMap<String,Object> Input) {
         Log.v(TAG, "set_TextViews : " + Input.values());
+
+        fb_userid.setText((String)Input.get("id"));
+        fb_userpwd.setText((String)Input.get("pwd"));
         fb_username.setText((String) Input.get("name"));
         fb_useremail.setText((String) Input.get("email"));
         fb_userphone.setText((String) Input.get("phone"));
-        fb_usermasterid.setText((String) Input.get("mid"));
     }
 
-    public void set_TextViews(HashMap<String,Object> Input) {
+    public void set_TextViews(HashMap<String,Object> Input)
+    {
         Log.v(TAG, "set_TextViews : " + Input.values());
         header_name.setText((String) Input.get("name"));
         header_email.setText((String) Input.get("email"));
-        if (Input.get("mid").equals("NULL"))
-        {
-            header_masterid.setText("보유 차량이 없습니다!");
-        }
-        else {
-            header_masterid.setText((String) Input.get("mid"));
-        }
     }
 
     @Override

@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.Layout;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -19,13 +18,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
 import FB_obj.fb_master_info;
-import FB_obj.fb_master_login;
 
 public class MasterHome extends AppCompatActivity implements RelativeLayout.OnClickListener {
     TextView timeView;
@@ -35,7 +32,6 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
     private String mid;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference Fdatabase;
-    private fb_master_login log_bit;
     private fb_master_info info;
     //////////////////
     private float airtemp;
@@ -83,31 +79,13 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
         Intent intent = getIntent();
         mid = intent.getExtras().getString("mid");
 
-        log_bit = new fb_master_login(mid,"1");     //로그인 업뎃
-        set_login_bit(log_bit);
-        init_info_table();
-
-        //update_state();                //현재 센서의 모든 값들을 받아와 db에 업데이트
+        info = new fb_master_info(mid, (float) 25.5,0,0,null,1);
+        info.update();
         //fb_message_listener();        //사용자로부터 메시지 수신 리스너
         ////////////////////////////
     }
 
-    public void set_login_bit(fb_master_login input)    //fb에 로그인 비트를 설정한다. 1 접속 0 미접속
-    {
-        Fdatabase.child("master_login").child(mid).setValue(input);
-    }
 
-    public void init_info_table()       //초기값을 테이블에 입력해 업뎃
-    {
-        airtemp =20;
-        seatbelt = 0;
-        airpower = 0;
-        medialink = "NULL";
-
-        info = new fb_master_info(mid,Float.toString(airtemp),Integer.toString(seatbelt),Integer.toString(airpower),medialink);
-
-        Fdatabase.child("master_info").child(mid).setValue(info);
-    }
 
     public void UpdateTimeMethod(){
         @SuppressLint("HandlerLeak") final Handler handler = new Handler(){
@@ -169,7 +147,7 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        log_bit = new fb_master_login(mid,"0");  //로갓 상태로 만들기
-        set_login_bit(log_bit);
+        info = new fb_master_info(mid, (float) 25.5,0,0,null,0); //로갓 상태로 만들기
+        info.update();
     }
 }

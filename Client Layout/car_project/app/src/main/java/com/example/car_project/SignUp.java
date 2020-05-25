@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,31 +15,24 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import FB_obj.fb_user_permission;
 import FB_obj.fb_user_profile;
 
 public class SignUp extends AppCompatActivity {
 
     private EditText user_id;
-    private EditText user_mail;//ID부
-
-    private EditText user_pwd;
-    private EditText user_carid;
+    private EditText user_pwd;// EditText user_pwd;
+    private EditText user_email;
     private EditText user_name;
     private EditText user_phone;
     private Button signup_btn;
 
     private FirebaseAuth firebaseAuth;//사용자 인증확인용
-    private DatabaseReference Fdatabase;//데베 접근자
+    private DatabaseReference Freference;//데베 접근자
     private static final String TAG = "SignUp";
 
 
@@ -49,7 +41,6 @@ public class SignUp extends AppCompatActivity {
 
     private ArrayList<String> midarry = new ArrayList<>();
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,31 +48,36 @@ public class SignUp extends AppCompatActivity {
         // 회원 가입 창
 
         user_id = (EditText) findViewById(R.id.id_input);
-        user_mail = (EditText) findViewById(R.id.mail_input);
+        user_email = (EditText) findViewById(R.id.email_input);
         user_pwd = (EditText) findViewById(R.id.pwd_input);
-        user_carid = (EditText) findViewById(R.id.carid_input);
         user_name = (EditText) findViewById(R.id.name_input);
         user_phone = (EditText) findViewById(R.id.phone_input);
+
         signup_btn = (Button) findViewById(R.id.sign_up_btn);
 
-        fb_mid = (TextView)findViewById(R.id.invisible_signup_mid);
-        fb_mid_count = (TextView)findViewById(R.id.invisible_signup_midcount);
+        //fb_mid = (TextView)findViewById(R.id.invisible_signup_mid);
+        //fb_mid_count = (TextView)findViewById(R.id.invisible_signup_midcount);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        Fdatabase = FirebaseDatabase.getInstance().getReference();
-        fb_registration_listener();
-    }
+        Freference = FirebaseDatabase.getInstance().getReference();
+
+     }
 
     public void Create_User_id(View view)
     {
-        String name = user_name.getText().toString().trim();
         String id = user_id.getText().toString().trim();
-        String mail = user_mail.getText().toString().trim();
         String pwd = user_pwd.getText().toString().trim();
+        String name = user_name.getText().toString().trim();
+        String email = user_email.getText().toString().trim();
         String phone = user_phone.getText().toString().trim();
-        String carid = user_carid.getText().toString().trim();
-        String email = id+"@"+mail;
 
+        String fb_id = id+"@test.com";
+
+        if(id.equals("") || id == null)
+        {
+            Toast.makeText(getApplicationContext(), "전화번호를 채워주세요!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(email.equals("") || email == null)
         {
             Toast.makeText(getApplicationContext(), "email을 채워주세요!", Toast.LENGTH_SHORT).show();
@@ -97,16 +93,16 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "이름을 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(phone.equals("") || name == null)
+        if(phone.equals("") || phone == null)
         {
             Toast.makeText(getApplicationContext(), "전화번호를 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        boolean register = Register_on_Fb(id, mail,name,phone,carid); //carid가 이미 등록된것인가?
+        fb_user_profile profile = new fb_user_profile(id,pwd,name,email,phone);
 
-        if (register == true) {
-            firebaseAuth.createUserWithEmailAndPassword(email, pwd)
+        if (profile.update()) {
+            firebaseAuth.createUserWithEmailAndPassword(fb_id, pwd)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -123,49 +119,16 @@ public class SignUp extends AppCompatActivity {
                         }
                     });
         }
+
         else
         {
-            Toast.makeText(getApplicationContext(), "이미 주인이 존재하는 차량입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "DB 갱신 오류", Toast.LENGTH_SHORT).show();
         }
 
     }
 
-    //user_data에 추가
-    public boolean Register_on_Fb(String ID,String Mail, String Name, String Phone, String Carid)
-    {
-        String Email = ID+"@"+Mail;
-        if (Carid.equals("") || Carid == null)          //carid 미입력
-        {
-            fb_user_profile profile = new fb_user_profile(Email,Name,Phone,Carid);
-            Fdatabase.child("user_data").child(ID).setValue(profile);
-        }
-        else                //리스너로부터 carid가 이미 owner가 있는가를 검사
-        {
-            fb_user_permission perm = new fb_user_permission("1","1","1","1",Carid,Email,"owner","2025/01/01");
-            fb_user_profile profile = new fb_user_profile(Email,Name,Phone,Carid);
 
-            Log.v(TAG, "method :"+midarry); //displays the key for the node
-
-            if (midarry.size() != 0)
-            {
-                for(String i : midarry)
-                {
-                    Log.v(TAG + "i :", (String) i);
-                    if(i.equals(Carid)) //이미 존재하는 carid
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            Fdatabase.child("user_data").child(ID).setValue(profile);
-            Fdatabase.child("user_permission").push().setValue(perm);
-            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
-            return true;
-        }
-        return true;
-    }
-
+/*
     //carid 검사를 위한 리스너
     public void fb_registration_listener()
     {
@@ -206,4 +169,6 @@ public class SignUp extends AppCompatActivity {
 
         midarry.add(cnt,input);
     }
+    */
+
 }
