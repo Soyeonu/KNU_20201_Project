@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import Client_Operation.Connection;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -17,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
         TextView mText = findViewById(R.id.signInBtn);
         // 사용자 이름이 있으면 불러와서 세팅
         mText.setText("[ㅇㅇㅇ]로 시작"); // [ㅇㅇㅇ]로 시작
+
+        new Connection().execute("http://ec2-52-78-193-12.ap-northeast-2.compute.amazonaws.com:3000/clientReq", "test", "6");
     }
 
     public void onClickSign(View v){
