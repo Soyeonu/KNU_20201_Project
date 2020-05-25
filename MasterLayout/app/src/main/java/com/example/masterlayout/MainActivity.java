@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,28 +27,30 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    ////////////////////
     private static final String TAG = "MainActivity :";
-    EditText masterid;
+    private EditText mid_input;
     FirebaseAuth firebaseAuth;
+    /////////////////////
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        firebaseAuth = FirebaseAuth.getInstance();
+        mid_input = (EditText)findViewById(R.id.mid);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         Button start = findViewById(R.id.btn);
         start.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View view){
-                login_Anony();
+                login_Anony();//익명 로그인
             }
         });
 
-        check_owner_listener();
     }
-
 
     public void login_Anony()
     {
@@ -61,23 +64,21 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"인증 완료!",Toast.LENGTH_SHORT).show();
 
                     Intent intent = new Intent(getApplicationContext(), MasterHome.class);
+                    intent.putExtra("mid",mid_input.getText().toString());
                     startActivity(intent);
-                    startActivity(intent);
-                    //updateUI(user);
                 } else {
                     // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInAnonymously:failure", task.getException());
                     Toast.makeText(getApplicationContext(), "인증 실패",
                             Toast.LENGTH_SHORT).show();
-                    //updateUI(null);
                 }
 
-                // ...
             }
         });
     }
+    /*
 
-    public void check_owner_listener()
+    public void check_mid_listener()        //owner가 존재하는 차량인가?
     {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
         ref.addValueEventListener(new ValueEventListener() {
@@ -90,9 +91,9 @@ public class MainActivity extends AppCompatActivity {
                     if (childDataSnapshot != null)
                     {
                         //og.v(TAG, "in listener" + childDataSnapshot.child("masterid").getKey());
-                        Log.v(TAG, "in listener " + childDataSnapshot.child("masterid").getValue());   //gives the value for given keyname
+                        Log.v(TAG, "in listener " + childDataSnapshot.child("mid").getValue());   //gives the value for given keyname
 
-                        /*
+
                         if(useremail.equals(childDataSnapshot.child("email").getValue()))
                         {
                             HashMap<String,Object> InputMap = new HashMap<>();
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-                         */
+
                     }
                 }
             }
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
+    }*/
 
 
 

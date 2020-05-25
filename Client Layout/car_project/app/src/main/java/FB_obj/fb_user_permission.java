@@ -12,10 +12,10 @@ public class fb_user_permission {
     // 현재 총 3개의 권한으로 나눔
     // 하위키가 랜덤, 피식별자, 식별자를 적어야함.
 
-    public int airconAuth;
-    public int usersettingAuth;
-    public int mediaAuth;
-    public int etcAuth;
+    public String airconAuth;
+    public String usersettingAuth;
+    public String mediaAuth;
+    public String etcAuth;
     public String mid;
     public String email;
     public String spot = null;
@@ -24,7 +24,7 @@ public class fb_user_permission {
     public fb_user_permission()//get_value를 위한 빈객체
     {    }
 
-    public fb_user_permission(int AirconAuth, int UsersettingAuth, int MediaAuth, int EtcAuth,
+    public fb_user_permission(String AirconAuth, String UsersettingAuth, String MediaAuth, String EtcAuth,
                               String Mid, String Email,String Spot, String Exdate)
     {
         this.airconAuth = AirconAuth;
@@ -37,19 +37,19 @@ public class fb_user_permission {
         this.exdate = Exdate;
     }
 
-    public int get_airconAuth()
+    public String get_airconAuth()
     {
         return this.airconAuth;
     }
-    public int get_usersettinAuth()
+    public String get_usersettinAuth()
     {
         return this.usersettingAuth;
     }
-    public int get_mediaAuth()
+    public String get_mediaAuth()
     {
         return this.mediaAuth;
     }
-    public int get_etcAuth()
+    public String get_etcAuth()
     {
         return this.etcAuth;
     }

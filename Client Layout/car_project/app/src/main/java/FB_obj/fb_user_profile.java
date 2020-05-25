@@ -8,7 +8,7 @@ import java.util.Map;
 public class fb_user_profile{
 
     //유저는 1 프로필, 다수의 등록이 가능
-    //키는 마스터로 사용한다.
+    //키는 email id로 설정한다.
 
     public String email = null;
     public String name = null;

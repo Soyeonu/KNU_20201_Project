@@ -53,7 +53,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     DatabaseReference Fdatabase;//데이터베이스 접근용
     String username;
     String useremail;
-    //////////////////
+
     TextView header_name;
     TextView header_email;
     TextView header_masterid;
@@ -101,7 +101,6 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         FirebaseUser fbuser = firebaseAuth.getCurrentUser();
         Toast.makeText(getApplicationContext(),"반갑습니다.\n"+ fbuser.getEmail()+"으로 로그인 하였습니다.", Toast.LENGTH_SHORT).show();
 
-
         View header = navView.getHeaderView(0);
         header_name = (TextView)header.findViewById(R.id.user_name);
         header_email = (TextView)header.findViewById(R.id.user_email);
@@ -112,7 +111,8 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         fb_userphone = (TextView)header.findViewById(R.id.invisible_phone);
         fb_usermasterid = (TextView)header.findViewById(R.id.invisible_masterid);
 
-        fb_userdata_listener();
+        fb_userdata_listener();     //사용자 정보를 업데이트를 위한 리스너
+        //fb_masterinfo_listener();     //마스터 정보를 받기 위한 리스너
 
         //Log.v(TAG, "oncreate header name : "+ header_name.toString());
     }

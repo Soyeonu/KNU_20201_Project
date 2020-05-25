@@ -96,7 +96,7 @@ public class SignIn extends AppCompatActivity {
                                     //FirebaseUser user = firebaseAuth.getCurrentUser();
 
                                     Log.d(TAG, eTextId.getText().toString());
-                                    Intent intent = new Intent(getApplicationContext(), car_func.class);
+                                    Intent intent = new Intent(getApplicationContext(), mid_select.class);
                                     finish();
                                     startActivity(intent);
                                 } else {

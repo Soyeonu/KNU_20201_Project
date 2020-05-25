@@ -40,7 +40,7 @@ public class SignUp extends AppCompatActivity {
     private Button signup_btn;
 
     private FirebaseAuth firebaseAuth;//사용자 인증확인용
-    private DatabaseReference Fdatabase;//데이터베이스 접근용
+    private DatabaseReference Fdatabase;//데베 접근자
     private static final String TAG = "SignUp";
 
 
@@ -70,7 +70,6 @@ public class SignUp extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         Fdatabase = FirebaseDatabase.getInstance().getReference();
         fb_registration_listener();
-
     }
 
     public void Create_User_id(View view)
@@ -114,8 +113,6 @@ public class SignUp extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "회원가입 완료! 로그인을 진행해 주세요!", Toast.LENGTH_SHORT).show();
                                 //FirebaseUser user = firebaseAuth.getCurrentUser(); 자동로그인
-
-
                                 finish();
                                 Intent intent = new Intent(getApplicationContext(), SignIn.class);
                                 startActivity(intent);
@@ -136,44 +133,41 @@ public class SignUp extends AppCompatActivity {
     //user_data에 추가
     public boolean Register_on_Fb(String ID,String Mail, String Name, String Phone, String Carid)
     {
-        //가입 2가지로 나눔
-        //carid를 입력받았는가 아닌가
-
         String Email = ID+"@"+Mail;
         if (Carid.equals("") || Carid == null)          //carid 미입력
         {
             fb_user_profile profile = new fb_user_profile(Email,Name,Phone,Carid);
             Fdatabase.child("user_data").child(ID).setValue(profile);
         }
-        else                //리스너로부터 carid가 이미 owner가 있는가를 검사한다.
+        else                //리스너로부터 carid가 이미 owner가 있는가를 검사
         {
-            fb_user_permission perm = new fb_user_permission(1,1,1,1,Carid,Email,"owner","2025/01/01");
+            fb_user_permission perm = new fb_user_permission("1","1","1","1",Carid,Email,"owner","2025/01/01");
             fb_user_profile profile = new fb_user_profile(Email,Name,Phone,Carid);
 
             Log.v(TAG, "method :"+midarry); //displays the key for the node
 
-            for(String i : midarry)
+            if (midarry.size() != 0)
             {
-                Log.v(TAG + "i :", (String) i);
-                if(i.equals(Carid)) //이미 존재하는 carid
+                for(String i : midarry)
                 {
-                    return false;
-                }
-                else
-                {
-                    Fdatabase.child("user_data").child(ID).setValue(profile);
-                    Fdatabase.child("user_permission").push().setValue(perm);
-
-                    DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
-                    return true;
+                    Log.v(TAG + "i :", (String) i);
+                    if(i.equals(Carid)) //이미 존재하는 carid
+                    {
+                        return false;
+                    }
                 }
             }
 
+            Fdatabase.child("user_data").child(ID).setValue(profile);
+            Fdatabase.child("user_permission").push().setValue(perm);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
+            return true;
         }
         return true;
     }
 
-    public void fb_registration_listener()      //carid 검사를 위한 리스너
+    //carid 검사를 위한 리스너
+    public void fb_registration_listener()
     {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
         Query query = ref.orderByChild("mid");
@@ -189,10 +183,9 @@ public class SignUp extends AppCompatActivity {
                     if (childDataSnapshot != null)
                     {
                         String Input = (String) childDataSnapshot.child("mid").getValue();
-                        create_midarr(Input,i);
+                        Create_midarr(Input,i);
                         i++;
                     }
-
                 }
             }
 
@@ -203,7 +196,7 @@ public class SignUp extends AppCompatActivity {
         });
     }
 
-    public void create_midarr(String Input, int Count) {
+    public void Create_midarr(String Input, int Count) {
         fb_mid.setText(Input);
         String temp = (String)Integer.toString(Count);
         fb_mid_count.setText(temp);
