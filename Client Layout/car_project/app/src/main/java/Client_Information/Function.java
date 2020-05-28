@@ -35,11 +35,11 @@ public class Function {
         this.Message = Msg;
     }
 
-    public String get_message(){
+    public String gain_message(){
         return this.Message;
     }
 
-    public String get_devnum(){
+    public String gain_devnum(){
         return this.DeviceNum;
     }
 

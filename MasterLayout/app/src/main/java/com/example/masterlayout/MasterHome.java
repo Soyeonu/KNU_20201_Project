@@ -1,5 +1,6 @@
 package com.example.masterlayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -15,14 +17,17 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import FB_obj.fb_master_info;
+import MasterInfo.Masterinfo;
 
 public class MasterHome extends AppCompatActivity implements RelativeLayout.OnClickListener {
     TextView timeView;
@@ -31,8 +36,8 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
     ///////////////////
     private String mid;
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference Fdatabase;
-    private fb_master_info info;
+    private DatabaseReference Freference;
+    private Masterinfo info;
     //////////////////
     private float airtemp;
     private int seatbelt;
@@ -67,7 +72,7 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
 
         ///////////////////////////////
         firebaseAuth = FirebaseAuth.getInstance();
-        Fdatabase = FirebaseDatabase.getInstance().getReference();
+        Freference = FirebaseDatabase.getInstance().getReference();
 
         if(firebaseAuth.getCurrentUser() == null) {
             finish();
@@ -77,15 +82,13 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
         Toast.makeText(getApplicationContext(),"반갑습니다!", Toast.LENGTH_SHORT).show();
 
         Intent intent = getIntent();
-        mid = intent.getExtras().getString("mid");
+        mid = intent.getExtras().getString("mid").trim();
 
-        info = new fb_master_info(mid, (float) 25.5,0,0,null,1);
+        info = new Masterinfo(mid, (float) -999,-1,-1,null,1);
         info.update();
         //fb_message_listener();        //사용자로부터 메시지 수신 리스너
         ////////////////////////////
     }
-
-
 
     public void UpdateTimeMethod(){
         @SuppressLint("HandlerLeak") final Handler handler = new Handler(){
@@ -147,7 +150,7 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        info = new fb_master_info(mid, (float) 25.5,0,0,null,0); //로갓 상태로 만들기
+        info = new Masterinfo(mid, (float) -999,-1,-1,null,0); //로갓 상태로 만들기
         info.update();
     }
 }

@@ -52,39 +52,41 @@
             app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintVertical_bias="0.3"
             />
+
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20sp"
             android:text="비디오"
             android:textSize="20sp"
-            app:layout_constraintRight_toRightOf="@id/videoBtn"
             app:layout_constraintLeft_toLeftOf="@id/videoBtn"
-            app:layout_constraintTop_toBottomOf="@id/videoBtn"
-            android:layout_marginTop="20sp"
-            />
+            app:layout_constraintRight_toRightOf="@id/videoBtn"
+            app:layout_constraintTop_toBottomOf="@id/videoBtn" />
 
         <ImageButton
             android:id="@+id/musicBtn"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:background="@drawable/music_img"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.794"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/viewPager"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintVertical_bias="0.3"
-            />
+            app:layout_constraintVertical_bias="0.303" />
+
         <TextView
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:text="오디오"
             android:textSize="20sp"
-            app:layout_constraintRight_toRightOf="@id/musicBtn"
             app:layout_constraintLeft_toLeftOf="@id/musicBtn"
-            app:layout_constraintTop_toBottomOf="@id/musicBtn"
-            android:layout_marginTop="20dp"
-            />
+            app:layout_constraintRight_toRightOf="@id/musicBtn"
+            app:layout_constraintTop_toBottomOf="@id/musicBtn" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

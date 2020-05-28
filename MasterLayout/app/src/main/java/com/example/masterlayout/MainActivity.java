@@ -76,49 +76,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    /*
-
-    public void check_mid_listener()        //owner가 존재하는 차량인가?
-    {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
-                    //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
-                    //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
-                    //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
-                    if (childDataSnapshot != null)
-                    {
-                        //og.v(TAG, "in listener" + childDataSnapshot.child("masterid").getKey());
-                        Log.v(TAG, "in listener " + childDataSnapshot.child("mid").getValue());   //gives the value for given keyname
-
-
-                        if(useremail.equals(childDataSnapshot.child("email").getValue()))
-                        {
-                            HashMap<String,Object> InputMap = new HashMap<>();
-                            String email = (String) childDataSnapshot.child("email").getValue();
-                            String name = (String) childDataSnapshot.child("name").getValue();
-                            String phone = (String) childDataSnapshot.child("phone").getValue();
-                            String masterid= (String) childDataSnapshot.child("masterid").getValue();
-                            fb_user_profile profile = new fb_user_profile(email,name,phone,masterid);
-
-                            InputMap = (HashMap<String, Object>) profile.toMap();
-                            set_invisible_TextViews(InputMap);
-                            set_TextViews(InputMap);
-
-                        }
-
-
-                    }
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }*/
-
-
-
 }

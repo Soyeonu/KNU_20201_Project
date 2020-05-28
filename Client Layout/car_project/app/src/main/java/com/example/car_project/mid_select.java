@@ -34,13 +34,10 @@ public class mid_select  extends AppCompatActivity {
     TextView mid;
 
     ////////////////////////////
-    TextView fb_bit;
-    TextView fb_mid;
-
     EditText mid_input;
     Button connect_btn;
 
-    HashMap<String,Object> mid_hashmap;
+    HashMap<String,Object> mid_hashmap;                      // 접속중인 차량을 저장함
     Intent in_intent;
     private static final String TAG = "mid_select";
 
@@ -51,9 +48,6 @@ public class mid_select  extends AppCompatActivity {
 
         login_bit = (TextView)findViewById(R.id.login_view);
         mid = (TextView)findViewById(R.id.mid_view);
-
-        fb_bit =(TextView)findViewById(R.id.invisible_login);
-        fb_mid = (TextView)findViewById(R.id.invisible_mid);
 
         mid_input =(EditText)findViewById(R.id.mid_input);
         connect_btn = (Button)findViewById(R.id.connect_button);
@@ -76,9 +70,9 @@ public class mid_select  extends AppCompatActivity {
                 {
                     //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
                     //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
-                    String mid = (String) childDataSnapshot.child("mid").getValue();
+                    String mid = (String) childDataSnapshot.child("masterid").getValue();
                     String bit = (String) childDataSnapshot.child("login_bit").getValue();
-                    Log.v(TAG, "+ "+bit);
+                    Log.v(TAG, "+ "+mid + " "+bit);
 
                    create_midmap(mid,bit);
                 }
@@ -90,18 +84,9 @@ public class mid_select  extends AppCompatActivity {
         });
     }
 
-    public void create_midmap(String Mid, String Bit)       //접속한 모든 마스터 아이디의 맵 생성
+    public void create_midmap(String mid, String bit)       //접속한 모든 마스터 아이디의 맵 생성
     {
-        //settext
-        fb_mid.setText(Mid);
-        fb_bit.setText(Bit);
-
-        String mid = fb_mid.getText().toString();
-        String bitstring = fb_bit.getText().toString();
-        Log.v(TAG, "map : "+mid +" "+bitstring);
-
-        mid_hashmap.put(mid,bitstring);
-        Log.d(TAG, "map method : "+mid_hashmap);
+        mid_hashmap.put(mid,bit);
     }
 
     public void connect_next(View v)        //다음 액티비티로 진행하기 위해 리스너 통해 만든 맵을 검색

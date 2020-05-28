@@ -2,21 +2,19 @@ package com.example.car_project;
 
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
-
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class car_func_mycar extends Fragment {
     View view;
-    public car_func_mycar() {
+
+       public car_func_mycar() {
         // Required empty public constructor
         // 내 차량 관리
     }
@@ -41,6 +39,9 @@ public class car_func_mycar extends Fragment {
 //        adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.person), "안뇽뇽", "손님");
 //        adapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.person), "헬로로", "가족");
 
+        //////////////////////
+
         return view;
     }
+
 }

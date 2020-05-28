@@ -1,6 +1,11 @@
 package Client_Information;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 
 public class Registration {
     public String MasterID;
@@ -13,14 +18,15 @@ public class Registration {
     //***********************************
 
     //***********************************
-    public Permission UserPermission;
+    //public Permission UserPermission;
+    public HashMap<String, Boolean> UserPermission = new HashMap<String,Boolean>();  // 요소의 size가 0일때 어떠한 권한도 없음. 권한 삭제시 remove할 것
     //각 등록마다 사용자에게 주어지는 권한이 상이하기 떄문에 권한 객체는 등록 객체가 소유하는 개념
     //***********************************
 
     //***********************************
     public boolean Primary;
     //등록되는 Master에 대해 Car Owner의 권한을 갖는가
-     public boolean Secondary;
+    public boolean Secondary;
     //등록되는 Master에 대해 Temporary Owner의 권한을 갖는가 (Primary 하위개념)
     //***********************************
 
@@ -32,13 +38,13 @@ public class Registration {
         this.ExpireDate = expire;
     }
 
-    public Registration(String MID, String expire,Permission perm) {
+    public Registration(String MID, String expire,HashMap<String,Boolean> perm) {
         this.MasterID = MID;
         this.ExpireDate = expire;
         this.UserPermission = perm;
     }
 
-    public Registration(String MID, String expire, boolean flag, Permission perm, boolean primary, boolean secondary)
+    public Registration(String MID, String expire, boolean flag, HashMap<String,Boolean> perm, boolean primary, boolean secondary)
     {
         this.MasterID = MID;
         this.ExpireDate = expire;
@@ -66,9 +72,37 @@ public class Registration {
         this.Secondary = val;
     }
 
-    public boolean get_primary() { return this.Primary; }
+    public boolean gain_primary() { return this.Primary; }
 
-    public void CheckExpired(){
+    public boolean gain_secondary() { return this.Secondary; }
+
+    public String gain_masterid()
+    {
+        return this.MasterID;
+    }
+
+    public HashMap<String,Boolean> gain_permission()
+    {
+        return this.UserPermission;
+    }
+
+    public Calendar String2Calendar() throws ParseException {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        Date date = formatter.parse(this.ExpireDate);
+        cal.setTime(date);
+        return cal;
+    }
+
+    public String Calendar2String(Calendar cal)
+    {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        String str = formatter.format(cal.getTime());
+        return str;
+    }
+
+    public void CheckExpired()
+    {
 
     }
 

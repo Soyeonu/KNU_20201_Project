@@ -31,15 +31,18 @@ import com.google.firebase.database.annotations.Nullable;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import Client_Information.Masterinfo;
+import Client_Information.Registration;
 import Client_Information.User;
-import FB_obj.fb_user_profile;
 
 public class car_func extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     DrawerLayout drawerLayout;
     NavigationView navView;
+    private static final String TAG = "car_func";
 
     private FragmentManager fm;
     private FragmentTransaction ft;
@@ -47,29 +50,35 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     car_func_setting setfr;
     car_func_user userfr;
     car_func_mycar mycarfr;
-    private static final String TAG = "car_func";
 
     /////////////////
     FirebaseAuth firebaseAuth;//사용자 인증확인용
     DatabaseReference Freference;//데이터베이스 접근용
-    String username;
-    String useremail;
+
     String userid;
+    String masterid;
 
     TextView header_name;
     TextView header_email;
     TextView header_masterid;
 
+    private User currentuser;
+    private Masterinfo masterinfo;
     //////////////////
-    private User user;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_func);
 
+        Intent intent = getIntent();
+        userid = intent.getExtras().getString("uid");
+        masterid = intent.getExtras().getString("mid");
+
         car_func_home frHome = new car_func_home();
+        Bundle bundle = new Bundle(1);
+        bundle.putString("masterid",masterid);
+        frHome.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentlayout, frHome).commit();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -88,48 +97,62 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         navView.setItemIconTintList(null);
         fm = getSupportFragmentManager();
 
-        Intent intent = getIntent();
-        userid = intent.getExtras().getString("uid");
-        Log.v(TAG, "oncreate userid : " + userid);
+        View header = navView.getHeaderView(0);
+        header_name = (TextView)header.findViewById(R.id.user_name);
+        header_email = (TextView)header.findViewById(R.id.user_email);
 
         firebaseAuth = FirebaseAuth.getInstance();
         Freference = FirebaseDatabase.getInstance().getReference();
+        currentuser = new User();
+        masterinfo = new Masterinfo();
+
+        Log.v(TAG, "oncreate userid : " + userid);
+
+        curuser_listener();         //현재 사용자 정보의 업데이트를 위한 리스너
+        masterinfo_listener();     //마스터 정보를 받기 위한 리스너
+    }
+
+    protected void onStart() {
+        super.onStart();
+        login_check();
+    }
+
+    public void login_check()
+    {
         //유저가 로그인 하지 않은 상태라면 null 상태이고 이 액티비티를 종료하고 로그인 액티비티를 연다.
         if(firebaseAuth.getCurrentUser() == null) {
             finish();
             startActivity(new Intent(this, SignIn.class));
         }
-
         //유저가 있다면, null이 아니면 계속 진행
-        FirebaseUser fbuser = firebaseAuth.getCurrentUser();
-        Toast.makeText(getApplicationContext(),"반갑습니다.\n"+ userid +"으로 로그인 하였습니다.", Toast.LENGTH_SHORT).show();
-
-        View header = navView.getHeaderView(0);
-        header_name = (TextView)header.findViewById(R.id.user_name);
-        header_email = (TextView)header.findViewById(R.id.user_email);
-
-        user = new User();
-
-        fb_userdata_listener();     //사용자 정보를 업데이트를 위한 리스너
-        //fb_masterinfo_listener();     //마스터 정보를 받기 위한 리스너
+        Toast.makeText(getApplicationContext(),"반갑습니다.\n"+ masterid+"에 "+ userid +"으로 로그인 하였습니다.", Toast.LENGTH_SHORT).show();
     }
 
-    public void fb_userdata_listener() {
+    public Boolean is_available()
+    {
+        /*
+           0. 마스터 아이디 존재여부
+           1. 기한체크 expired
+           2. 오너체크 0==0
+           3. 권한체크 perm == null
+        */
+        return true;
+    }
+
+    public void curuser_listener() {                                                                            //현재 접속 유저의 정보를 가져오는 리스너
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data").child(userid);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
                 //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
                 //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
                 if (dataSnapshot != null)
                 {
-                    Log.v(TAG, "in listener + " + dataSnapshot.getKey()); //displays the key for the node
-                    User userinfo = dataSnapshot.getValue(User.class);
-                    user = userinfo;
-                    Log.v(TAG," + " + userinfo);
-
-                    set_TextViews();
+                    Log.v(TAG, "in clientlistener + " + dataSnapshot); //displays the key for the node
+                    User user = dataSnapshot.getValue(User.class);
+                    currentuser = user;
+                    is_available();     //현재 사용자의 reglist에 masterid가 존재하고, 유효한가를 검사
+                    set_TextViews();    //헤더 textview 설정
                 }
             }
             @Override
@@ -137,23 +160,12 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
             }
         });
     }
-/*
-    public void set_fb_TextViews(HashMap<String,Object> Input) {
-        Log.v(TAG, "set_TextViews : " + Input.values());
-
-        fb_userid.setText((String)Input.get("id"));
-        fb_userpwd.setText((String)Input.get("pwd"));
-        fb_username.setText((String) Input.get("name"));
-        fb_useremail.setText((String) Input.get("email"));
-        fb_userphone.setText((String) Input.get("phone"));
-    }
-    */
 
     public void set_TextViews()
     {
-        Log.v(TAG,"setTextview - username : " + user.get_profile().get_username());
-        header_name.setText(user.get_profile().get_username());
-        header_email.setText(user.get_profile().get_email());
+        Log.v(TAG,"setTextview - username : " + currentuser.gain_profile().gain_username());
+        header_name.setText(currentuser.gain_profile().gain_username());
+        header_email.setText(currentuser.gain_profile().gain_email());
     }
 
     @Override
@@ -177,6 +189,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
                 // 권한 관리
                 mycarfr = new car_func_mycar();
                 fm.beginTransaction().replace(R.id.fragmentlayout, mycarfr).commitAllowingStateLoss();
+
                 break;
 
             case R.id.nav_setting:
@@ -188,5 +201,29 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void masterinfo_listener() {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("master_info").child(masterid);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
+                //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
+                if (dataSnapshot != null) {
+                    Log.v(TAG, "in masterlistener + " + dataSnapshot); //displays the key for the node
+                    String bit = (String) dataSnapshot.child("login_bit").getValue();
+                    String temp = (String) dataSnapshot.child("air_temp").getValue();
+                    String airpower = (String) dataSnapshot.child("air_power").getValue();
+                    String seatbelt = (String) dataSnapshot.child("seatbelt").getValue();
+                    String play_media = (String) dataSnapshot.child("play_media").getValue();
+                    masterinfo = new Masterinfo(masterid, temp, airpower, seatbelt, play_media, bit);
+                    //setviews();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

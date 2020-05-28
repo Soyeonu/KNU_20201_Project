@@ -28,13 +28,9 @@ public class SignIn extends AppCompatActivity {
     private EditText eTextId;
     private EditText eTextPw;
     private CheckBox autoLogin;
-    FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
     private DatabaseReference Freference;
     private static final String TAG = "SignIn";
-
-    String test;
-
-    private User user;
 
 
     @Override
@@ -43,10 +39,7 @@ public class SignIn extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
         firebaseAuth = FirebaseAuth.getInstance();
         Freference = FirebaseDatabase.getInstance().getReference();
-
-        user = new User();
-
-        test_listener();
+        //test_listener();
     }
 /*
     public void onStart(){
@@ -71,7 +64,6 @@ public class SignIn extends AppCompatActivity {
         String id_input=null;
         String pwd_input=null;
         final String TAG = "SignIn";
-
 
         switch(id){
             case R.id.loginBtn:
@@ -100,6 +92,7 @@ public class SignIn extends AppCompatActivity {
                 }
                  */
                 final String finalId_input = id_input;
+                firebaseAuth = FirebaseAuth.getInstance();
                 firebaseAuth.signInWithEmailAndPassword(id_input+"@google.com", pwd_input)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -116,34 +109,11 @@ public class SignIn extends AppCompatActivity {
                                 } else {
                                     Toast.makeText(getApplicationContext(), "인증 실패!", Toast.LENGTH_SHORT).show();
                                     Log.d(TAG, eTextId.getText().toString());
+                                    Log.e(TAG, "onComplete: Failed=" + task.getException().getMessage());
                                 }
                             }
                         });
                 break;
         }
-        Log.v(TAG, "in button + " + user.get_profile().get_username());
-    }
-
-    public void test_listener() {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("user_data").child("test");
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
-                    //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
-                    //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
-                    if (dataSnapshot != null)
-                    {
-                        Log.v(TAG, "in listener + " + dataSnapshot.getKey()); //displays the key for the node
-                        User userinfo = dataSnapshot.getValue(User.class);
-                        test = userinfo.get_userid();
-                        user = userinfo;
-                        Log.v(TAG," + " + userinfo );
-                    }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
     }
 }

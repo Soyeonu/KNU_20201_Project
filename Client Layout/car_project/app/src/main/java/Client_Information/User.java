@@ -4,12 +4,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import FB_obj.fb_user_profile;
 
-public class User {
+public class User implements Serializable {
     public Profile UserProfile;
     public ArrayList<Registration> RegList= new ArrayList<Registration>();
     public String UserID;
@@ -36,14 +36,19 @@ public class User {
         this.RegList.add(NewReg);
     }
 
-    public String get_userid()
+    public String gain_userid()
     {
         return this.UserID;
     }
 
-    public Profile get_profile()
+    public Profile gain_profile()
     {
         return this.UserProfile;
+    }
+
+    public ArrayList<Registration> gain_list()
+    {
+        return this.RegList;
     }
 
     public boolean update()

@@ -29,7 +29,6 @@ public class car_func_home extends Fragment implements ImageButton.OnClickListen
         // 에어컨과 비디오, 오디오를 포함한 클래스
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,4 +73,6 @@ public class car_func_home extends Fragment implements ImageButton.OnClickListen
                 break;
         }
     }
+
+
 }

@@ -20,11 +20,11 @@ public class Profile {
         this.PhoneNumber = Phonenumber;
     }
 
-    public String get_username()
+    public String gain_username()
     {
         return UserName;
     }
-    public String get_email()
+    public String gain_email()
     {
         return UserEmail;
     }
