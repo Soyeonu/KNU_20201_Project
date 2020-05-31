@@ -30,9 +30,9 @@ public class ListViewAdapter extends BaseAdapter {
         final Context context = parent.getContext();
 
         if(convertView == null) {
-//            LayoutInflater inflater = (LayoutInflater) Context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            convertView = inflater.inflate(R.layout.listview_item, parent, false);
-            convertView = View.inflate(context, R.layout.listview_item, parent);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.listview_item, parent, false);
+            //   convertView = View.inflate(context, R.layout.listview_item, parent);
         }
 
         ImageView iconImageView = convertView.findViewById(R.id.listImg);

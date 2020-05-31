@@ -1,5 +1,6 @@
 package com.example.car_project;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -66,10 +67,21 @@ public class car_func_home extends Fragment implements ImageButton.OnClickListen
             case R.id.videoBtn:
                 // 비디오 버튼 클릭 시
                 System.out.println("video");
+                // video 관련 파일 창으로 연결
+                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Intent.createChooser(intent, "Open"));    // 파일을 열기만함.
+
                 break;
             case R.id.musicBtn:
                 // 오디오 버튼 클릭 시
                 System.out.println("music");
+                // audio 관련 파일 창으로 연결
+                intent = new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("audio/*");
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Intent.createChooser(intent, "Open"));    // 파일을 열기만함.
                 break;
         }
     }
