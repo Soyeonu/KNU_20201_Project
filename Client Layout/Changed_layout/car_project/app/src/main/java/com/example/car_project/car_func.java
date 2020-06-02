@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,6 +27,8 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     car_func_user userfr;
     car_func_mycar mycarfr;
 
+    private Toast toast;
+    private long backKeyPressedTime = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,4 +86,25 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    public void onBackPressed() {
+        // 기존 뒤로가기 버튼 기능
+        //  super.onBackPressed();
+
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        // 2초 이내로 다시 뒤로가기 버튼 누르면 toast 취소
+        // 표시된 toast 취소
+        if(System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finishAffinity();
+            toast.cancel();
+        }
+    }
+
 }

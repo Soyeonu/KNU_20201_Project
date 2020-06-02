@@ -11,7 +11,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class CarSelect extends AppCompatActivity {
-
+    private Toast toast;
+    private long backKeyPressedTime = 0;    // 뒤로가기 버튼 시간
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,5 +43,25 @@ public class CarSelect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        // 기존 뒤로가기 버튼 기능
+        //  super.onBackPressed();
+
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        // 2초 이내로 다시 뒤로가기 버튼 누르면 toast 취소
+        // 표시된 toast 취소
+        if(System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finishAffinity();
+            toast.cancel();
+        }
     }
 }
