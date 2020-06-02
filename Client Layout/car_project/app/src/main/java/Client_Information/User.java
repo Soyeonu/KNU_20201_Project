@@ -3,6 +3,7 @@ package Client_Information;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,53 +11,44 @@ import java.util.Calendar;
 
 
 public class User implements Serializable {
-    public Profile UserProfile;
-    public ArrayList<Registration> RegList= new ArrayList<Registration>();
-    public String UserID;
-    public String UserPW;
+    private String UserID;
+    private String UserPW;
+    private String Name;
+    private String Phone;
+    private String Email;
 
+    //Empty Constructor For Firebase
     public User()
     {    }
 
-    public User(String ID, String PW,Profile prof){
+    public User(String ID, String PW, String Name, String Phone, String Email){
         this.UserID = ID;
         this.UserPW = PW;
-        this.UserProfile = prof;
+        this.Name = Name;
+        this.Phone = Phone;
+        this.Email = Email;
     }
 
-    public User(String ID, String PW,Profile prof,ArrayList<Registration> reg){
-        this.UserID = ID;
-        this.UserPW = PW;
-        this.UserProfile = prof;
-        this.RegList = reg;
-    }
 
-    public void Register(String MasterID, String Expiredate){
-        Registration NewReg = new Registration(MasterID, Expiredate);
-        this.RegList.add(NewReg);
-    }
+    public String getUserID(){ return UserID; }
+    public String getUserPW(){ return UserPW; }
+    public String getName(){ return Name; }
+    public String getPhone(){ return Phone; }
+    public String getEmail(){ return Email; }
 
-    public String gain_userid()
-    {
-        return this.UserID;
-    }
 
-    public Profile gain_profile()
-    {
-        return this.UserProfile;
+    public void setEmail(String email) {
+        Email = email;
     }
-
-    public ArrayList<Registration> gain_list()
-    {
-        return this.RegList;
+    public void setUserID(String userID) { UserID = userID; }
+    public void setUserPW(String userPW) {
+        UserPW = userPW;
     }
-
-    public boolean update()
-    {
-        User user = new User(this.UserID, this.UserPW, this.UserProfile,this.RegList);
-        DatabaseReference Fdatabase = FirebaseDatabase.getInstance().getReference();
-        Fdatabase.child("user_data").child(UserID).setValue(user);
-        return true;
+    public void setName(String name) {
+        Name = name;
+    }
+    public void setPhone(String phone) {
+        Phone = phone;
     }
 
 }
