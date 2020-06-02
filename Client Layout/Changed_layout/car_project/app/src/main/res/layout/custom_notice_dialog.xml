@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+ >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="알림 설정"
+        android:textSize="20sp"
+        android:gravity="center"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cfcfcf"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+
+
+    <Switch
+        android:id="@+id/noticeSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="알림"
+        android:textSize="15sp"
+        android:checked="true"
+        android:paddingHorizontal="50dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        >
+        <Button
+            android:id="@+id/noticeOkBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/round_btn"
+            android:gravity="center"
+            android:text="확인"
+            android:textSize="17sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            />
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff" />
+        <Button
+            android:id="@+id/noticeCancelBtn"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/round_btn"
+            android:gravity="center"
+            android:text="취소"
+            android:textSize="17sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            />
+
+
+    </LinearLayout>
+
+</LinearLayout>
