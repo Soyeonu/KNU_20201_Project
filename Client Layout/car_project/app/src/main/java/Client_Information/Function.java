@@ -1,6 +1,8 @@
 package Client_Information;
 
 public class Function {
+    //**05.29) Useless Class**
+
     //***********************************
     //DeviceNum에 해당하는 장치에 Message를 전달해 기능 명령
     //ex) AIR001 장치에 TURNON 메시지를 보내 에어컨 켜기
@@ -12,9 +14,9 @@ public class Function {
     //Master Side의 Device 클래스 안에 해당 내용을 선언할 필요가 있다.
     //Owner가 권한을 부여하려면 부여할 수 있는 모든 권한의 List가 존재해야 한다. (단순 목록이므로 별도 보관만 필요)
     //***********************************
-    public String Name;
-    public String DeviceNum;
-    public String Message;
+    private String Name;
+    private String DeviceNum;
+    private String Message;
 
     public Function()
     {}

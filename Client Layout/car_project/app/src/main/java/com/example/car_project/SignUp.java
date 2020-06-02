@@ -4,12 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,22 +22,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import Client_Information.Function;
-import Client_Information.Permission;
-import Client_Information.Profile;
 import Client_Information.Registration;
 import Client_Information.User;
 
 public class SignUp extends AppCompatActivity {
 
     private EditText user_id;
-    private EditText user_pwd;// EditText user_pwd;
+    private EditText user_pw;// EditText user_pwd;
     private EditText user_email;
     private EditText user_name;
     private EditText user_phone;
@@ -47,6 +52,8 @@ public class SignUp extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;//사용자 인증확인용
     private DatabaseReference Freference;//데베 접근자
     private static final String TAG = "SignUp";
+
+    private static Boolean Error = false;
 
     private HashMap<String,Object> map;
 
@@ -58,42 +65,35 @@ public class SignUp extends AppCompatActivity {
 
         user_id = (EditText) findViewById(R.id.id_input);
         user_email = (EditText) findViewById(R.id.email_input);
-        user_pwd = (EditText) findViewById(R.id.pwd_input);
+        user_pw = (EditText) findViewById(R.id.pwd_input);
         user_name = (EditText) findViewById(R.id.name_input);
         user_phone = (EditText) findViewById(R.id.phone_input);
-        master_id = (EditText)findViewById(R.id.master_input);
 
         signup_btn = (Button) findViewById(R.id.sign_up_btn);
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        Freference = FirebaseDatabase.getInstance().getReference();
-        map = new HashMap<String, Object>();
-        Alluser_listener();
      }
 
     public void Create_User_id(View view) {
+        Error = false;
         String id = user_id.getText().toString().trim();
-        String pwd = user_pwd.getText().toString().trim();
+        String pw = user_pw.getText().toString().trim();
         String name = user_name.getText().toString().trim();
         String email = user_email.getText().toString().trim();
         String phone = user_phone.getText().toString().trim();
-        String masterid = master_id.getText().toString().trim();
-        ArrayList<Registration> reglist = new ArrayList<Registration>();
 
-        String fb_id = id + "@google.com";
-
+        // 입력 예외처리
         if (id.equals("") || id == null) {
-            Toast.makeText(getApplicationContext(), "전화번호를 채워주세요!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "ID를 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
         if (email.equals("") || email == null) {
             Toast.makeText(getApplicationContext(), "email을 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (pwd.equals("") || pwd == null) {
+        if (pw.equals("") || pw == null) {
             Toast.makeText(getApplicationContext(), "비밀번호를 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
+        //비밀번호 제약조건 추가
         if (name.equals("") || name == null) {
             Toast.makeText(getApplicationContext(), "이름을 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
@@ -102,102 +102,97 @@ public class SignUp extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "전화번호를 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (masterid != null) {
-            for (Map.Entry<String, Object> data : map.entrySet()) { // 모든 유저에 대해 reglist에서 masterid가 입력한 masterid와 같고, primary, 주인이 존재하는지를 본다. 없다면 새로운 주인을 입력한 해당 id에 부여한다.
-                System.out.println(String.format("키 : %s, 값 : %s", data.getKey(), data.getValue()));
-                User olduser = (User) data.getValue();
-                ArrayList<Registration> list = olduser.gain_list();
-                int list_count = list.size();
-                if (list_count != 0) {
-                    for (int index = 0; index < list_count; index++) {
-                        System.out.println(list.get(index));
-                        Registration reg = list.get(index);
-                        String mid = reg.gain_masterid();
-                        Boolean primary = reg.gain_primary();
 
-                        if (masterid.equals(mid) && primary == true) {
-                            Toast.makeText(getApplicationContext(), mid + "의 주인은 " + olduser.gain_userid() + "입니다.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }
+        Connection con = new Connection();
+        con.setURL("http://ec2-15-164-233-172.ap-northeast-2.compute.amazonaws.com:3000/signin");
+        con.execute(id, pw, name, phone, email);
+
+
+    }
+
+    class Connection extends AsyncTask<String, Void, String> {
+        private String url;
+
+        protected String doInBackground(String... strings){
+            try{
+                //Connection.execute() 실행 시 () 안에 들어가는 String들을 사용해 객체 생성
+                //메시지 인자에
+                System.out.println("connection init");
+                System.out.println("URL : " + this.url);
+
+                JSONObject message = new JSONObject();
+
+
+                System.out.println("Type : Signin");
+                message.accumulate("ID", strings[0]);
+                message.accumulate("PW", strings[1]);
+                message.accumulate("Name", strings[2]);
+                message.accumulate("Phone", strings[3]);
+                message.accumulate("Email", strings[4]);
+                //System.out.println(message.get("ID"));
+
+
+                //HTTP 연결을 담을 객체 및 버퍼 생성
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try{
+                    //인자로 들어오는 URL에 연결
+                    java.net.URL url = new URL(this.url);
+                    con = (HttpURLConnection)url.openConnection();
+
+                    //연결 설정
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Cache-Control", "no-cache");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Accept", "text/html");
+
+                    OutputStream outputStream = con.getOutputStream();
+
+                    //버퍼에 message를 담아 전송
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+                    writer.write(message.toString());
+                    writer.flush();
+                    writer.close();
+
+                    //응답을 수신
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
                     }
+
+                    System.out.println("result : " + buffer.toString());
+                    return buffer.toString();
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
             }
-            //검사가 끝났다면 주인으로 추가함
-            HashMap<String,Boolean> perm = new HashMap<String,Boolean>();
-            perm.put("air_temp",true);
-            perm.put("air_power",true);
-            perm.put("seatbelt",true);
-            perm.put("play_media",true);
-            Registration regdata = new Registration(masterid,"2020/09/05",false,perm,true,false);
-            reglist.add(regdata);
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            return null;
         }
-        /*
-        Function func1 = new Function("func1","DevNum","Message");
-        Function func2 = new Function("func2","DevNum","Message");
-        ArrayList<Function> funclist = new ArrayList<Function>();
-        funclist.add(func1);
-        funclist.add(func2);
-        Permission perm = new Permission(id,funclist);
 
-        ArrayList<Registration> reg = new ArrayList<Registration>();
-        Registration data1 = new Registration("mid1","2020/09/05",false,perm,true,true);
-        Registration data2 = new Registration("mid1","2020/12/12",false,perm,true,true);
-        reg.add(data1);
-        reg.add(data2);
- */
-            Profile profile = new Profile(name, phone, email);
-            User newUser = new User(id, pwd, profile,reglist);
+        public void setURL(String url) { this.url = url; }
 
-            if (newUser.update()) {
-                firebaseAuth.createUserWithEmailAndPassword(fb_id, pwd)
-                        .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(getApplicationContext(), "회원가입 완료! 로그인을 진행해 주세요!", Toast.LENGTH_SHORT).show();
-                                    //FirebaseUser user = firebaseAuth.getCurrentUser(); 자동로그인
-                                    finish();
-                                    Intent intent = new Intent(getApplicationContext(), SignIn.class);
-                                    startActivity(intent);
-                                } else { //회원가입 조건에 충족하지 않음.
+        public void onPostExecute(String result){
+            System.out.println(result);
 
-                                    Toast.makeText(getApplicationContext(), "회원가입 실패!", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            } else {
-                Toast.makeText(getApplicationContext(), "DB 갱신 오류", Toast.LENGTH_SHORT).show();
+            if(result.equals("SIGNIN_ERR")){
+                Toast.makeText(getApplicationContext(), "회원가입 실패 : 이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show();
             }
+            else{
+                Toast.makeText(getApplicationContext(), "회원가입 성공!", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
     }
-
-    public void Alluser_listener() {                        //user_data 하위 모든 유저 객체를 참조하여 Hashmap에 저장한다.
-        Freference = Freference.child("user_data");
-        Freference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                //Toast.makeText(getApplicationContext(), (String)childDataSnapshot.child("phone").getValue(), Toast.LENGTH_SHORT).show();
-                //Log.v(TAG, "in listener" + childDataSnapshot.getKey()); //displays the key for the node
-                //Log.v(TAG, "in listener" + childDataSnapshot.child("email").getValue());   //gives the value for given keyname
-                if (dataSnapshot != null)
-                {
-                    for(DataSnapshot data : dataSnapshot.getChildren()) {
-                        User user = data.getValue(User.class);
-                        map.put(user.gain_userid(),user);
-                    }
-                    Log.v(TAG, "in listener + map" + map);
-                }
-                /*
-                else
-                {
-                    Freference.removeEventListener(this);
-                }
-                 */
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-
-
 }
