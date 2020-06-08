@@ -73,4 +73,5 @@ public class car_func_setting extends Fragment {
         }
 
     }
+
 }

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".car_func_home">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.2"
+            android:layout_marginHorizontal="20dp"
+            android:background="#f2f2f2"
+            />
+
+        <me.relex.circleindicator.CircleIndicator
+            android:id="@+id/indicator"
+            app:ci_drawable="@drawable/black_radius"
+            app:ci_height="5dp"
+            app:ci_width="5dp"
+            app:ci_margin="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/viewPager"
+            />
+
+        <ImageButton
+            android:id="@+id/videoBtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/video_img"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewPager"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintVertical_bias="0.3"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="비디오"
+            android:textSize="20sp"
+            app:layout_constraintRight_toRightOf="@id/videoBtn"
+            app:layout_constraintLeft_toLeftOf="@id/videoBtn"
+            app:layout_constraintTop_toBottomOf="@id/videoBtn"
+            android:layout_marginTop="20sp"
+            />
+
+        <ImageButton
+            android:id="@+id/musicBtn"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:background="@drawable/music_img"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/viewPager"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintVertical_bias="0.3"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="오디오"
+            android:textSize="20sp"
+            app:layout_constraintRight_toRightOf="@id/musicBtn"
+            app:layout_constraintLeft_toLeftOf="@id/musicBtn"
+            app:layout_constraintTop_toBottomOf="@id/musicBtn"
+            android:layout_marginTop="20dp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
