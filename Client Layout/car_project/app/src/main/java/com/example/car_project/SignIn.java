@@ -97,7 +97,7 @@ public class SignIn extends AppCompatActivity {
 
     public void Login_Check(String ID, final String PW) {
         Connection con = new Connection();
-        con.setURL("ec2-15-164-233-172.ap-northeast-2.compute.amazonaws.com:3000/login");
+        con.setURL("http://ec2-15-164-233-172.ap-northeast-2.compute.amazonaws.com:3000/login");
         con.execute(ID, PW);
     }
 
