@@ -3,38 +3,77 @@ package com.example.car_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import Client_Information.Profile;
+import Client_Information.User;
 
 public class MainActivity extends AppCompatActivity {
+    Button login;
+    private EditText eTextId;
+    private EditText eTextPw;
+    private CheckBox autoLogin;
+    private long backKeyPressedTime = 0;
+    private Toast toast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextView mText = findViewById(R.id.signInBtn);
-        // 사용자 이름이 있으면 불러와서 세팅
-        mText.setText("[ㅇㅇㅇ]로 시작"); // [ㅇㅇㅇ]로 시작
+        eTextId=findViewById(R.id.id);
+        eTextPw=findViewById(R.id.pw);
+        autoLogin=findViewById(R.id.autoCheck);
+        login = findViewById(R.id.loginBtn);
 
-        //서버에 연결하는 코드
-        //new Connection().execute("http://ec2-52-78-193-12.ap-northeast-2.compute.amazonaws.com:3000/clientReq", "test", "6");
+
     }
 
-    public void onClickSign(View v){
+    public void onClickLogin(View v){
         int id = v.getId();
         Intent it;
-        // 로그인 혹은 회원 가입 버튼 이벤트
         switch(id){
-            case R.id.signInBtn:
-                //로그인 화면
-                it = new Intent(MainActivity.this, SignIn.class);
+            case R.id.loginBtn:
+                eTextId = findViewById(R.id.id);
+                eTextPw = findViewById(R.id.pw);
+                System.out.println("id: = " + eTextId.getText().toString() + " pw: = " + eTextPw.getText().toString());
+
+
+                // 로그인 성공 하면 차 선택창으로 넘어가기
+                it = new Intent(this, CarSelect.class);
                 startActivity(it);
                 break;
-            case R.id.signUpBtn:
+
+            case R.id.signupBtn:
                 it = new Intent(MainActivity.this, SignUp.class);
                 startActivity(it);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        // 기존 뒤로가기 버튼 기능
+      //  super.onBackPressed();
+
+        if(System.currentTimeMillis() > backKeyPressedTime + 2000) {
+            backKeyPressedTime = System.currentTimeMillis();
+            toast = Toast.makeText(this, "\'뒤로\'버튼 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
+
+        // 2초 이내로 다시 뒤로가기 버튼 누르면 toast 취소
+        // 표시된 toast 취소
+        if(System.currentTimeMillis() <= backKeyPressedTime + 2000) {
+            finishAffinity();
+            toast.cancel();
+        }
+    }
 }
+
