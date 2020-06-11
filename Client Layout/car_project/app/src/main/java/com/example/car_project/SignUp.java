@@ -104,7 +104,7 @@ public class SignUp extends AppCompatActivity {
         }
 
         Connection con = new Connection();
-        con.setURL("http://ec2-15-164-233-172.ap-northeast-2.compute.amazonaws.com:3000/signin");
+        con.setURL("http://ec2-13-124-217-71.ap-northeast-2.compute.amazonaws.com:3000/signin");
         con.execute(id, pw, name, phone, email);
 
 

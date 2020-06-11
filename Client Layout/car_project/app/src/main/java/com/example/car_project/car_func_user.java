@@ -10,11 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import Client_Information.User;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class car_func_user extends Fragment {
+    private User user;
 
     public car_func_user() {
         // Required empty public constructor
@@ -28,5 +31,14 @@ public class car_func_user extends Fragment {
         // Inflate the layout for this fragment
 
         return inflater.inflate(R.layout.fragment_car_func_user, container, false);
+    }
+
+    public void getUserFromServer(){
+        //Parent Activity(car_func)로부터 userid 가져옴
+        String uid = ((car_func)getActivity()).getUserid();
+
+        //uid를 통해 서버에서 비밀번호를 제외한 정보를 받아옴
+
+        //해당 Fragment의 User Attribute에 저장
     }
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -22,6 +23,8 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
 
     private FragmentManager fm;
     private FragmentTransaction ft;
+    private String userid;
+    private String regid;
     car_func_home carfr;
     car_func_setting setfr;
     car_func_user userfr;
@@ -52,6 +55,16 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         navView.setBackgroundColor(Color.rgb(242, 242, 242));
         navView.setItemIconTintList(null);
         fm = getSupportFragmentManager();
+
+        //로그인 정보를 통해 사용자 정보 가져오기
+        Intent intent = getIntent();
+        userid = intent.getExtras().getString("userid");
+        regid = intent.getExtras().getString("regid");
+
+
+
+        //getUserInfoFromServer(userid);
+
     }
 
     @Override
@@ -106,5 +119,11 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
             toast.cancel();
         }
     }
+
+    public void getUserInfoFromServer(String userid){
+
+    }
+
+    public String getUserid() { return this.userid; }
 
 }

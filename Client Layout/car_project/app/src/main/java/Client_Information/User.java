@@ -21,9 +21,9 @@ public class User implements Serializable {
     public User()
     {    }
 
-    public User(String ID, String PW, String Name, String Phone, String Email){
+    //보안을 위해 생성자에 PW는 없음.
+    public User(String ID, String Name, String Phone, String Email){
         this.UserID = ID;
-        this.UserPW = PW;
         this.Name = Name;
         this.Phone = Phone;
         this.Email = Email;
