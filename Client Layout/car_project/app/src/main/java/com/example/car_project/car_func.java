@@ -79,8 +79,8 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
 
             case R.id.nav_user:
                 // 사용자
-                userfr = new car_func_user();
-                fm.beginTransaction().replace(R.id.fragmentlayout, userfr).commitAllowingStateLoss();
+                Intent intent = new Intent(car_func.this, Car_func_user.class);
+                startActivity(intent);
                 break;
 
             case R.id.nav_mycar:

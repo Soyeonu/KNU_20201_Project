@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="이름 변경"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="변경할 이름을 입력해주세요"
+        android:textSize="18sp"
+        android:layout_margin="20dp"
+        android:gravity="center"
+        />
+
+
+    <EditText
+        android:id="@+id/edit_name"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:hint="이름 입력"
+        android:textSize="20sp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="5dp"
+        >
+        <Button
+            android:id="@+id/changeName_ok"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/round_btn"
+            android:gravity="center"
+            android:text="확인"
+            android:textSize="17sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            />
+        <View
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="#ffffff" />
+        <Button
+            android:id="@+id/changeName_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/round_btn"
+            android:gravity="center"
+            android:text="취소"
+            android:textSize="17sp"
+            android:textColor="#ffffff"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+
+</LinearLayout>
