@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.car_project.Tools.URLManager;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -104,7 +105,7 @@ public class SignUp extends AppCompatActivity {
         }
 
         Connection con = new Connection();
-        con.setURL("http://ec2-13-124-217-71.ap-northeast-2.compute.amazonaws.com:3000/signin");
+        con.setURL(URLManager.getUrl() + "signup");
         con.execute(id, pw, name, phone, email);
 
 

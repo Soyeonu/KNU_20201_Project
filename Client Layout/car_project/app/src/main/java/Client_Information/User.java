@@ -11,11 +11,10 @@ import java.util.Calendar;
 
 
 public class User implements Serializable {
-    private String UserID;
-    private String UserPW;
-    private String Name;
-    private String Phone;
-    private String Email;
+    private static String UserID;
+    private static String Name;
+    private static String Phone;
+    private static String Email;
 
     //Empty Constructor For Firebase
     public User()
@@ -31,7 +30,6 @@ public class User implements Serializable {
 
 
     public String getUserID(){ return UserID; }
-    public String getUserPW(){ return UserPW; }
     public String getName(){ return Name; }
     public String getPhone(){ return Phone; }
     public String getEmail(){ return Email; }
@@ -41,9 +39,6 @@ public class User implements Serializable {
         Email = email;
     }
     public void setUserID(String userID) { UserID = userID; }
-    public void setUserPW(String userPW) {
-        UserPW = userPW;
-    }
     public void setName(String name) {
         Name = name;
     }

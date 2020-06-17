@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
-public class Car_func_user extends AppCompatActivity {
+public class car_func_user extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class Car_func_user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("비밀번호 변경");
-                ChangePwDialog pwDialog = new ChangePwDialog(Car_func_user.this);
+                ChangePwDialog pwDialog = new ChangePwDialog(car_func_user.this);
                 pwDialog.show();
             }
         });
@@ -43,7 +43,7 @@ public class Car_func_user extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 System.out.println("이름 변경");
-                ChangeNameDialog nameDialog = new ChangeNameDialog(Car_func_user.this);
+                ChangeNameDialog nameDialog = new ChangeNameDialog(car_func_user.this);
                 nameDialog.show();
             }
         });
@@ -52,7 +52,7 @@ public class Car_func_user extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Car_func_user.this, car_func.class);
+                Intent intent = new Intent(car_func_user.this, car_func.class);
                 startActivity(intent);
             }
         });

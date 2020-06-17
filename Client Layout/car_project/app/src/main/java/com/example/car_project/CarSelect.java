@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.car_project.Tools.URLManager;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -93,7 +95,7 @@ public class CarSelect extends AppCompatActivity {
 
     public void getRegListFromServer(String uid){
         Connection con = new Connection();
-        con.setURL("http://ec2-13-124-217-71.ap-northeast-2.compute.amazonaws.com:3000/getreg");
+        con.setURL(URLManager.getUrl() + "getreg");
         con.execute(uid);
     }
 

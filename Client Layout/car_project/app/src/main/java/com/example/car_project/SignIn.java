@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.car_project.Tools.URLManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -97,7 +98,7 @@ public class SignIn extends AppCompatActivity {
 
     public void Login_Check(String ID, final String PW) {
         Connection con = new Connection();
-        con.setURL("http://ec2-13-124-217-71.ap-northeast-2.compute.amazonaws.com:3000/login");
+        con.setURL(URLManager.getUrl() + "login");
         con.execute(ID, PW);
     }
 
