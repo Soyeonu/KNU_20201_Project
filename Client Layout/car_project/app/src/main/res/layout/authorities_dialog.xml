@@ -18,24 +18,10 @@
         android:layout_gravity="end"
         android:layout_margin="20dp" />
 
-    <Switch
-        android:id="@+id/temp_on"
+    <ListView
+        android:id="@+id/authority_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEMP_ON"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_margin="20dp"
-        />
-
-    <Switch
-        android:id="@+id/temp_off"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TEMP_OFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_margin="20dp"
+        android:layout_height="300dp"
         />
 
 </LinearLayout>

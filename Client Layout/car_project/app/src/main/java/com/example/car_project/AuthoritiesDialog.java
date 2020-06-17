@@ -3,11 +3,17 @@ package com.example.car_project;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import java.util.List;
 
 public class AuthoritiesDialog extends Dialog{
     private Context context;
@@ -31,19 +37,26 @@ public class AuthoritiesDialog extends Dialog{
 
         setContentView(R.layout.authorities_dialog);
 
-        // 현재 권한의 상태를 switch로 나타내기 위해 세팅
-        final Switch temp_on = findViewById(R.id.temp_on);
-        temp_on.setChecked(true);   // 권한이 있으면 true
-        final Switch temp_off = findViewById(R.id.temp_off);
-        temp_off.setChecked(false); // 권한이 없으면 false
+        final ListView listview;
+        final AuthoritiesLVAdapter adapter = new AuthoritiesLVAdapter();
+
+        listview = findViewById(R.id.authority_list);
+        listview.setAdapter(adapter);
+
+        // Dialog 눌렀을 때 초기 상태
+        // add 권한 이름, 권한 on or off 를 boolean으로 표시 해주시면 됩니당
+        adapter.addItem("TEMP_ON", false);
+        adapter.addItem("TEMP_OFF", false);
+        adapter.addItem("HELLO", false);
+
 
         Button saveBtn = findViewById(R.id.saveBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() { // 권한을 변경하고 저장~
             @Override
             public void onClick(View v) {
-
-                if(temp_on.isChecked()){    // 권한 체크
-                    System.out.println("temp_on이 체크되었습니다");
+                // getFlag로 권한 스위치 온오프 여부를 알 수 있습니다
+                for(int i = 0; i < adapter.getCount(); i++){
+                   System.out.println( ((AuthoritiesListViewItem)adapter.getItem(i)).getFlag());
                 }
 
                 Toast toast = Toast.makeText(context, "권한 설정이 저장되었습니다", Toast.LENGTH_SHORT);
