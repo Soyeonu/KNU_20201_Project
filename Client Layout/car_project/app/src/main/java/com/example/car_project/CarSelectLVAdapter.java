@@ -52,10 +52,10 @@ public class CarSelectLVAdapter extends BaseAdapter {
         return cs_list.get(position);
     }
 
-    public void addItem(String id, String name) {
+    public void addItem(String mid, String name) {
         CarSelectListView item = new CarSelectListView();
 
-        item.setMasterId(id);
+        item.setMasterId(mid);
         item.setOwenerName(name);
 
         cs_list.add(item);

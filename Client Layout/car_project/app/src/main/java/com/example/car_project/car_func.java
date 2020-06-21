@@ -13,10 +13,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.car_project.Tools.GlobalManager;
 import com.example.car_project.Tools.URLManager;
 import com.google.android.material.navigation.NavigationView;
 
@@ -80,10 +82,14 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         userid = intent.getExtras().getString("userid");
         regid = intent.getExtras().getString("regid");
 
+        user.setRegID(regid);
+
         getUserInfoFromServer(userid);
 
 
     }
+
+    public User getUser() { return this.user; }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -228,6 +234,10 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
                     user.setPhone(json.getString("Phone"));
                     user.setEmail(json.getString("Email"));
                     user.setName(json.getString("Name"));
+                    user.setOwnMasterID(json.getString("OwnMasterID"));
+
+                    GlobalManager globalManager = (GlobalManager)getApplicationContext();
+                    globalManager.setState(user);
 
                     //drawer header의 내용 변경
                     TextView drawheader_Name = (TextView) findViewById(R.id.user_name);

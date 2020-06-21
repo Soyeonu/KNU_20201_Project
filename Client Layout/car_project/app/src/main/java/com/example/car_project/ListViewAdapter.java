@@ -39,7 +39,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         ListViewItem listviewItem = userList.get(position);
         userName.setText(listviewItem.getUserName());
-        phone.setText(listviewItem.getPhoneNum());
+        phone.setText(listviewItem.getExpDate());
 
         return convertView;
     }
@@ -54,11 +54,12 @@ public class ListViewAdapter extends BaseAdapter {
         return userList.get(position);
     }
 
-    public void addItem(String name, String phone) {
+    public void addItem(String name, String exp, String regid) {
         ListViewItem item = new ListViewItem();
 
         item.setUserName(name);
-        item.setPhoneNum(phone);
+        item.setExpDate(exp);
+        item.setRegID(regid);
 
         userList.add(item);
     }

@@ -186,7 +186,7 @@ public class SignUp extends AppCompatActivity {
         public void onPostExecute(String result){
             System.out.println(result);
 
-            if(result.equals("SIGNIN_ERR")){
+            if(result.equals("SIGNUP_ERR")){
                 Toast.makeText(getApplicationContext(), "회원가입 실패 : 이미 가입된 계정입니다.", Toast.LENGTH_SHORT).show();
             }
             else{

@@ -15,13 +15,15 @@ public class User implements Serializable {
     private static String Name;
     private static String Phone;
     private static String Email;
+    private static String RegID;
+    private static String OwnMasterID;
 
     //Empty Constructor For Firebase
     public User()
     {    }
 
     //보안을 위해 생성자에 PW는 없음.
-    public User(String ID, String Name, String Phone, String Email){
+    public User(String ID, String Name, String Phone, String Email, String reg){
         this.UserID = ID;
         this.Name = Name;
         this.Phone = Phone;
@@ -33,6 +35,8 @@ public class User implements Serializable {
     public String getName(){ return Name; }
     public String getPhone(){ return Phone; }
     public String getEmail(){ return Email; }
+    public String getRegID() { return RegID; }
+    public String getOwnMasterID() { return OwnMasterID; }
 
 
     public void setEmail(String email) {
@@ -45,5 +49,6 @@ public class User implements Serializable {
     public void setPhone(String phone) {
         Phone = phone;
     }
-
+    public void setRegID(String regid) { RegID = regid; }
+    public void setOwnMasterID(String mid) { OwnMasterID = mid; }
 }
