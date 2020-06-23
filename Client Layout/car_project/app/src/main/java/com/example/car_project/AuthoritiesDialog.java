@@ -164,7 +164,7 @@ public class AuthoritiesDialog extends Dialog{
                         if(permID.contains("_name")) continue;
                         Boolean bool = json.getBoolean(permID);
                         String permName = json.getString(permID + "_name");
-                        adapter.addItem(permName, bool);
+                        adapter.addItem(permID, permName, bool);
                     }while(i.hasNext());
 
                 }catch(Exception e){
@@ -176,9 +176,26 @@ public class AuthoritiesDialog extends Dialog{
                     @Override
                     public void onClick(View v) {
                         // getFlag로 권한 스위치 온오프 여부를 알 수 있습니다
+                        JSONObject jsonObject = new JSONObject();
+                        try {
+                            jsonObject.accumulate("MasterID", MasterID);
+                            jsonObject.accumulate("RegID", RegID);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
                         for(int i = 0; i < adapter.getCount(); i++){
                             System.out.println( ((AuthoritiesListViewItem)adapter.getItem(i)).getFlag());
+                            try{
+                                jsonObject.accumulate(((AuthoritiesListViewItem)adapter.getItem(i)).getPermID(), ((AuthoritiesListViewItem)adapter.getItem(i)).getFlag());
+                                jsonObject.accumulate(((AuthoritiesListViewItem)adapter.getItem(i)).getPermID()+"_name", ((AuthoritiesListViewItem)adapter.getItem(i)).getName());
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
                         }
+                        Connection_set con = new Connection_set();
+                        con.setURL(URLManager.getUrl() + "setperms");
+                        con.execute(jsonObject);
 
                         Toast toast = Toast.makeText(context, "권한 설정이 저장되었습니다", Toast.LENGTH_SHORT);
                         toast.show();
@@ -259,15 +276,11 @@ public class AuthoritiesDialog extends Dialog{
         public void onPostExecute(String result){
             System.out.println("res from server : " + result);
 
-            if(result.equals("NO_PERM")){
-                Toast.makeText(context.getApplicationContext(), "로그인 실패 : 존재하지 않는 아이디거나 비밀번호가 틀렸습니다.", Toast.LENGTH_SHORT).show();
+            if(result.equals("ERR_SETPERM")){
+                Toast.makeText(context.getApplicationContext(), "권한 저장에 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
             else{
-                final ListView listview;
-                final AuthoritiesLVAdapter adapter = new AuthoritiesLVAdapter();
-
-                listview = findViewById(R.id.carSelect_listview);
-                listview.setAdapter(adapter);
+                Toast.makeText(context.getApplicationContext(), "권한 저장 완료", Toast.LENGTH_SHORT).show();
             }
         }
 

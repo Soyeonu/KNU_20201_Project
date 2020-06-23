@@ -59,9 +59,10 @@ public class AuthoritiesLVAdapter extends BaseAdapter {
         return position;
     }
 
-    public void addItem(String name, boolean bool) {
+    public void addItem(String permID, String name, boolean bool) {
         AuthoritiesListViewItem item = new AuthoritiesListViewItem();
 
+        item.setPermID(permID);
         item.setName(name);
         item.setFlag(bool);
         list.add(item);
