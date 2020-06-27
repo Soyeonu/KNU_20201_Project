@@ -8,9 +8,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class Registration {
-    private String RegID;
-    private String MasterID;
-    private String UserID;
+    private static String RegID;
+    private static String MasterID;
 
     public String ExpireDate; //"2020/12/12"
     //등록 만료 기간 (이 기간이 지나면 만료)
@@ -21,21 +20,18 @@ public class Registration {
     //Empty Constructor For Firebase
     public Registration(){}
 
-    public Registration(String RID, String UID, String MID, String EXP){
+    public Registration(String RID, String MID, String EXP){
         this.RegID = RID;
-        this.UserID = UID;
         this.MasterID = MID;
         this.ExpireDate = EXP;
     }
 
     public void setRegID(String RID) {this.RegID = RID;}
-    public void setUserID(String UID) {this.UserID = UID;}
     public void setMasterID(String MID) {this.MasterID = MID;}
     public void setExpireDate(String EXP) {this.ExpireDate = EXP;}
     public void setTurnon_flag(Boolean val) {this.Turnon_flag = val;}
 
     public String getRegID() {return this.RegID;}
-    public String getUserID() {return this.UserID;}
     public String getMasterID() {return this.MasterID;}
     public String getExpireDate() {return this.ExpireDate;}
     public Boolean getTurnon_flag() {return this.Turnon_flag;}

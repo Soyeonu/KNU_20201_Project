@@ -182,11 +182,14 @@ public class CarSelect extends AppCompatActivity {
                 try {
                     JSONObject json = new JSONObject(result);
                     int count = json.getInt("count");
-                    for(int i = 1; i <= count; i++){
+                    for(int i = 0; i < count; i++){
                         String master = json.getString("master"+Integer.toString(i));
                         String owner = json.getString("owner" + Integer.toString(i));
+                        String regid = json.getString("reg" + Integer.toString(i));
+                        String exp = json.getString("exp" + Integer.toString(i));
+
                         System.out.println("master : " + master + "/ owner : " + owner);
-                        adapter.addItem(master, owner);
+                        adapter.addItem(master, owner, regid, exp);
                     }
 
                     listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -197,12 +200,18 @@ public class CarSelect extends AppCompatActivity {
                             // 클릭한 리스트뷰 마스터 아이디 출력
                             System.out.println(((CarSelectListView)adapter.getItem(position)).getMasterId());
 
-                            Toast.makeText(getApplicationContext(), ((CarSelectListView)adapter.getItem(position)).getMasterId() + "리스너 구동", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getApplicationContext(), ((CarSelectListView)adapter.getItem(position)).getMasterId() + "리스너 구동", Toast.LENGTH_SHORT).show();
                             // Car func 액티비티로 이동
                             Intent intent = new Intent(CarSelect.this, car_func.class);
                             intent.putExtra("userid", uid);
-                            String regid = ((CarSelectListView) adapter.getItem(position)).getOwenerName();
-                            intent.putExtra("regid", regid);
+                            String masterID = ((CarSelectListView) adapter.getItem(position)).getMasterId();
+                            String regID = ((CarSelectListView) adapter.getItem(position)).getRegid();
+                            String exp = ((CarSelectListView) adapter.getItem(position)).getExpdate();
+
+                            intent.putExtra("masterid", masterID);
+                            intent.putExtra("regid", regID);
+                            intent.putExtra("expdate", exp);
+
                             startActivity(intent);
                         }
                     });

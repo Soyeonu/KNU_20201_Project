@@ -15,8 +15,9 @@ public class User implements Serializable {
     private static String Name;
     private static String Phone;
     private static String Email;
-    private static String RegID;
     private static String OwnMasterID;
+
+    private static Registration registration;
 
     //Empty Constructor For Firebase
     public User()
@@ -35,8 +36,8 @@ public class User implements Serializable {
     public String getName(){ return Name; }
     public String getPhone(){ return Phone; }
     public String getEmail(){ return Email; }
-    public String getRegID() { return RegID; }
     public String getOwnMasterID() { return OwnMasterID; }
+    public Registration getRegistration() { return registration; }
 
 
     public void setEmail(String email) {
@@ -49,6 +50,6 @@ public class User implements Serializable {
     public void setPhone(String phone) {
         Phone = phone;
     }
-    public void setRegID(String regid) { RegID = regid; }
     public void setOwnMasterID(String mid) { OwnMasterID = mid; }
+    public void setRegistration(Registration reg) { registration = reg; }
 }

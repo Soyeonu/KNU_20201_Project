@@ -33,6 +33,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import Client_Information.Registration;
 import Client_Information.User;
 
 public class car_func extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -42,7 +43,6 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     private FragmentManager fm;
     private FragmentTransaction ft;
     private String userid;
-    private String regid;
 
     private User user = new User();
 
@@ -80,9 +80,13 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
         //로그인 정보를 통해 사용자 정보 가져오기
         Intent intent = getIntent();
         userid = intent.getExtras().getString("userid");
-        regid = intent.getExtras().getString("regid");
 
-        user.setRegID(regid);
+        String regid = intent.getExtras().getString("regid");
+        String masterid = intent.getExtras().getString("masterid");
+        String expdate = intent.getExtras().getString("expdate");
+
+        Registration reg = new Registration(regid, masterid, expdate);
+        user.setRegistration(reg);
 
         getUserInfoFromServer(userid);
 
