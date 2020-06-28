@@ -48,7 +48,7 @@ public class car_func_aircon extends Fragment implements Button.OnClickListener{
                 AirconDialog dialog = new AirconDialog(getContext());
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
-                lp.width = 1200;
+                lp.width = 1000;
                 lp.height = 1500;
                 dialog.show();
                 Window window = dialog.getWindow();
