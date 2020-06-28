@@ -113,6 +113,7 @@ public class AirconDialog extends Dialog {
     }
 
     public void Do_Function(String Message, String type, String value) {
+        System.out.println("Do : " + Message);
         Connection con = new Connection();
         con.setURL(URLManager.getUrl() + "sendmsgfromuser");
         User user = new User();
@@ -122,6 +123,7 @@ public class AirconDialog extends Dialog {
 
     class Connection extends AsyncTask<String, Void, String> {
         private String url;
+        private Boolean RESMODE = false;
 
         protected String doInBackground(String... strings){
             try{
@@ -132,12 +134,13 @@ public class AirconDialog extends Dialog {
 
                 JSONObject message = new JSONObject();
 
-                System.out.println("Type : Login");
+                //System.out.println("Type : Login");
                 message.accumulate("RegID", strings[0]);
                 message.accumulate("MasterID", strings[1]);
                 message.accumulate("UserID", strings[2]);
                 message.accumulate("Msg", strings[3]);
                 message.accumulate("Type", strings[4]);
+                if(strings[4].equals("RES")) RESMODE = true;
 
                 if(strings[5] != null) message.accumulate("Val", Integer.parseInt(strings[5]));
 
@@ -165,8 +168,11 @@ public class AirconDialog extends Dialog {
                     writer.flush();
                     writer.close();
 
+
                     //응답을 수신
                     InputStream stream = con.getInputStream();
+                    java.net.URL redir = new URL(URLManager.getUrl() + "waitfor?mid=" + strings[1] + "&type=TEMP");
+                    if(RESMODE) con = (HttpURLConnection)redir.openConnection();
 
                     reader = new BufferedReader(new InputStreamReader(stream));
 
@@ -195,12 +201,18 @@ public class AirconDialog extends Dialog {
         public void onPostExecute(String result){
             System.out.println(result);
 
-            if(result.equals("MSG SEND COMPLETE")){
-                Toast toast = Toast.makeText(context, "명령 전달 완료", Toast.LENGTH_SHORT);
+            if(!RESMODE) {
+                if (result.equals("MSG SEND COMPLETE")) {
+                    Toast toast = Toast.makeText(context, "명령 전달 완료", Toast.LENGTH_SHORT);
+                } else {
+                    //Error Handle
+                    Toast toast = Toast.makeText(context, "명령 실행 도중 에러가 발생했습니다 : " + result, Toast.LENGTH_SHORT);
+                }
             }
             else{
-                //Error Handle
-                Toast toast = Toast.makeText(context, "명령 실행 도중 에러가 발생했습니다 : " + result, Toast.LENGTH_SHORT);
+                TextView tv_temp;   // textview로 나타낸 온도
+                tv_temp = findViewById(R.id.tv_temperature);
+                tv_temp.setText(result);
             }
         }
 

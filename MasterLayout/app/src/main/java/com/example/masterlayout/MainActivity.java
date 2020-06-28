@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
                     //각 메시지별로 적절한 센서 구동시키는 메소드 삽입
                     case "TEMP_CHK":
                         //현재 에어컨 온도를 확인해 서버로 return하는 메소드
-                        DatabaseReference tempref = FirebaseDatabase.getInstance().getReference().child("Master").child("TEMP");System.out.println(msg + " is accepted.");
+                        DatabaseReference tempref = FirebaseDatabase.getInstance().getReference("Master/"+mid).child("TEMP");
+                        System.out.println(msg + " is accepted.");
                         //아두이노 모듈에서 값을 받아와 아래 setValue에 파라메터로 삽입 (테스트값 25)
                         tempref.setValue(25);
                         //Master-TEMP에 값을 쓰는 순간 Wait하고 있던 서버에서 이를 감지해 Client에게 해당 값을 돌려줄 것임
