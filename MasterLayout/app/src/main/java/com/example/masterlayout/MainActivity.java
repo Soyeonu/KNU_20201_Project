@@ -35,13 +35,13 @@ import java.util.Locale;
 
 import MasterInfo.Masterinfo;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RelativeLayout.OnClickListener{
 
     TextView timeView;
     TextView dateView;
 
     ///////////////////
-    private String mid = "master001";
+    private String mid = "master1";
     private Masterinfo info;
     //////////////////
     private float airtemp;
@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
         UpdateTimeMethod();
 
         RelativeLayout musicLayout = findViewById(R.id.musicLayout);
-        musicLayout.setOnClickListener((View.OnClickListener) this);
+        musicLayout.setOnClickListener(this);
         RelativeLayout videoLayout = findViewById(R.id.videoLayout);
-        videoLayout.setOnClickListener((View.OnClickListener) this);
+        videoLayout.setOnClickListener(this);
         RelativeLayout airconLayout = findViewById(R.id.airconLayout);
-        airconLayout.setOnClickListener((View.OnClickListener) this);
+        airconLayout.setOnClickListener(this);
 
         ImageButton preferences = findViewById(R.id.preferenceBtn);
         preferences.setOnClickListener(new ImageButton.OnClickListener(){
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-
+    @Override
     public void onClick(View v) {
         Intent it;
         switch(v.getId()){
@@ -143,36 +143,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fb_msg_listener(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Message").child(mid);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Message").child(mid);
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren())
-                {
-                    System.out.println("Listener Triggered");
-                    System.out.println(childDataSnapshot.toString());
-                    String msg = (String) childDataSnapshot.child("Msg").getValue();
-                    String val_str = (String) childDataSnapshot.child("Value").getValue();
+                System.out.println("Listener Triggered");
+                System.out.println(dataSnapshot.toString());
+                String msg = dataSnapshot.child("Msg").getValue().toString();
+                String val_str = dataSnapshot.child("Value").toString();
 
-                    switch(msg){
-                        //각 메시지별로 적절한 센서 구동시키는 메소드 삽입
-                        case "TEMP_CHK":
-                            //현재 에어컨 온도를 확인해 서버로 return하는 메소드
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Master").child("TEMP");
-                            System.out.println(msg + " is accepted.");
-                            //아두이노 모듈에서 값을 받아와 아래 setValue에 파라메터로 삽입 (테스트값 25)
-                            ref.setValue(25);
-                            //Master-TEMP에 값을 쓰는 순간 Wait하고 있던 서버에서 이를 감지해 Client에게 해당 값을 돌려줄 것임
-                            break;
-                        case "TEMP_DST":
-                            //에어컨 온도 조정하는 기능을 담당하는 메소드
-                            //아두이노 모듈에 Msg와 Val을 전달해 모듈 내부 값 조정
-                            //(해당 메소드)
-                            break;
-                        //기타 등등 아래에 case문으로 추가하면 됨
-                    }
-
+                switch(msg) {
+                    //각 메시지별로 적절한 센서 구동시키는 메소드 삽입
+                    case "TEMP_CHK":
+                        //현재 에어컨 온도를 확인해 서버로 return하는 메소드
+                        DatabaseReference tempref = FirebaseDatabase.getInstance().getReference().child("Master").child("TEMP");System.out.println(msg + " is accepted.");
+                        //아두이노 모듈에서 값을 받아와 아래 setValue에 파라메터로 삽입 (테스트값 25)
+                        tempref.setValue(25);
+                        //Master-TEMP에 값을 쓰는 순간 Wait하고 있던 서버에서 이를 감지해 Client에게 해당 값을 돌려줄 것임
+                        break;
+                    case "TEMP_DST":
+                        break;
                 }
+
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
