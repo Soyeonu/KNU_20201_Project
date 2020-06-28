@@ -58,8 +58,10 @@ public class AirconDialog extends Dialog {
         setContentView(R.layout.aircon_dialog);
 
         tv_temp = findViewById(R.id.tv_temperature);
-        tv_temp.setText("27");
         et_temp = findViewById(R.id.input_temp);
+
+        //현재 설정된 온도를 받기 위해 TEMP_CHK 메시지 전송
+        Do_Function("TEMP_CHK", "RES", null);
 
         TempBtnClickListener btnClickListener = new TempBtnClickListener();
         Button temp_up = findViewById(R.id.temp_upBtn);
@@ -76,7 +78,9 @@ public class AirconDialog extends Dialog {
                 Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
                 toast.show();
 
-                Do_Function("TEMP_DST", val);
+                Do_Function("TEMP_DST", "NORES", val);
+                //RES Type : Master에게서 응답을 받아야 하는 경우
+                //NORES Type : Master에게 메시지를 보낸 후 별도 응답이 필요없는 경우
 
                 dismiss();
             }
@@ -108,12 +112,12 @@ public class AirconDialog extends Dialog {
         }
     }
 
-    public void Do_Function(String Message, String value) {
+    public void Do_Function(String Message, String type, String value) {
         Connection con = new Connection();
         con.setURL(URLManager.getUrl() + "sendmsgfromuser");
         User user = new User();
         con.execute(user.getRegistration().getRegID(), user.getRegistration().getMasterID(),
-                user.getUserID(), Message, value);
+                user.getUserID(), Message, type, value);
     }
 
     class Connection extends AsyncTask<String, Void, String> {
@@ -133,8 +137,9 @@ public class AirconDialog extends Dialog {
                 message.accumulate("MasterID", strings[1]);
                 message.accumulate("UserID", strings[2]);
                 message.accumulate("Msg", strings[3]);
+                message.accumulate("Type", strings[4]);
 
-                if(strings[4] != null) message.accumulate("Val", Integer.parseInt(strings[4]));
+                if(strings[5] != null) message.accumulate("Val", Integer.parseInt(strings[5]));
 
 
                 //HTTP 연결을 담을 객체 및 버퍼 생성

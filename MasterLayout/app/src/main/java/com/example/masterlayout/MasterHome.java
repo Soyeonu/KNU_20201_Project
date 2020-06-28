@@ -35,8 +35,6 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
 
     ///////////////////
     private String mid;
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference Freference;
     private Masterinfo info;
     //////////////////
     private float airtemp;
@@ -70,24 +68,7 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
             }
         });
 
-        ///////////////////////////////
-        firebaseAuth = FirebaseAuth.getInstance();
-        Freference = FirebaseDatabase.getInstance().getReference();
-
-        if(firebaseAuth.getCurrentUser() == null) {
-            finish();
-            startActivity(new Intent(this,MainActivity.class));
-        }
-        FirebaseUser fbuser = firebaseAuth.getCurrentUser();
-        Toast.makeText(getApplicationContext(),"반갑습니다!", Toast.LENGTH_SHORT).show();
-
-        Intent intent = getIntent();
-        mid = intent.getExtras().getString("mid").trim();
-
-        info = new Masterinfo(mid, (float) -999,-1,-1,null,1);
-        info.update();
         //fb_message_listener();        //사용자로부터 메시지 수신 리스너
-        ////////////////////////////
     }
 
     public void UpdateTimeMethod(){
@@ -152,5 +133,42 @@ public class MasterHome extends AppCompatActivity implements RelativeLayout.OnCl
         super.onDestroy();
         info = new Masterinfo(mid, (float) -999,-1,-1,null,0); //로갓 상태로 만들기
         info.update();
+    }
+
+    public void fb_msg_listener(){
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Message").child(mid);
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren())
+                {
+                    System.out.println(childDataSnapshot.toString());
+                    String msg = (String) childDataSnapshot.child("Msg").getValue();
+                    String val_str = (String) childDataSnapshot.child("Value").getValue();
+
+                    switch(msg){
+                        //각 메시지별로 적절한 센서 구동시키는 메소드 삽입
+                        case "TEMP_CHK":
+                            //현재 에어컨 온도를 확인해 서버로 return하는 메소드
+                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Master").child("TEMP");
+                            //아두이노 모듈에서 값을 받아와 아래 setValue에 파라메터로 삽입 (테스트값 25)
+                            ref.setValue(25);
+                            //Master-TEMP에 값을 쓰는 순간 Wait하고 있던 서버에서 이를 감지해 Client에게 해당 값을 돌려줄 것임
+                            break;
+                        case "TEMP_DST":
+                            //에어컨 온도 조정하는 기능을 담당하는 메소드
+                            //아두이노 모듈에 Msg와 Val을 전달해 모듈 내부 값 조정
+                            //(해당 메소드)
+                            break;
+                            //기타 등등 아래에 case문으로 추가하면 됨
+                    }
+
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
