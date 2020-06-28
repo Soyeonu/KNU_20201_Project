@@ -182,6 +182,13 @@ public class CarSelect extends AppCompatActivity {
                 try {
                     JSONObject json = new JSONObject(result);
                     int count = json.getInt("count");
+                    if(count == 0){
+                        //등록된 차량이 없을 시
+                        //이곳에 버튼을 선언하고 띄운 후 클릭 리스너도 만들어주면 됨
+
+                        return;
+                    }
+
                     for(int i = 0; i < count; i++){
                         String master = json.getString("master"+Integer.toString(i));
                         String owner = json.getString("owner" + Integer.toString(i));
