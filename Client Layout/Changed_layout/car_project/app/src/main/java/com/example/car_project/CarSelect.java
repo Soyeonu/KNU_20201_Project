@@ -1,13 +1,22 @@
 package com.example.car_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class CarSelect extends AppCompatActivity {
@@ -25,9 +34,45 @@ public class CarSelect extends AppCompatActivity {
         listview.setAdapter(adapter);
 
         // adapter에 addItem( masterId, Owner name) 으로 리스트 뷰에 추가할 수 있습니다
-        adapter.addItem("hello", "길동");
-        adapter.addItem("no", "아니");
-        adapter.addItem("bye", "잘가");
+//        adapter.addItem("hello", "길동");
+//        adapter.addItem("no", "아니");
+//        adapter.addItem("bye", "잘가");
+
+        System.out.println(adapter.getCount());
+        if(adapter.getCount() == 0) {
+            System.out.println("start");
+
+            ConstraintLayout layout = findViewById(R.id.carselect_layout);
+            Button btn = new Button(this);
+
+            ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(
+                    ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+            lp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+            lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+            lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+            lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+
+            btn.setLayoutParams(lp);
+            btn.setText("등록하기");
+            btn.setTextColor(Color.WHITE);
+            btn.setTextSize(20);
+            btn.setBackgroundResource(R.drawable.round_btn);
+
+            layout.addView(btn);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MasterIdDialog dialog = new MasterIdDialog(CarSelect.this);
+                    WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                    lp.copyFrom(dialog.getWindow().getAttributes());
+                    lp.width = 800;
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                    dialog.show();
+                    Window window = dialog.getWindow();
+                    window.setAttributes(lp);
+                }
+            });
+        }
 
         // 리스트뷰 클릭 리스너
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

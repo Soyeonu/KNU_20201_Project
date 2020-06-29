@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 
@@ -43,6 +45,14 @@ public class car_func_aircon extends Fragment implements Button.OnClickListener{
             case R.id.airconBtn:
                 //에어컨 작동 버튼 클릭 시 이벤트 설정
                 System.out.println("에어컨 작동하기");
+                AirconDialog dialog = new AirconDialog(getContext());
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = 1000;
+                lp.height = 1500;
+                dialog.show();
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
                 break;
         }
     }

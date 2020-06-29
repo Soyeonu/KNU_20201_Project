@@ -3,31 +3,24 @@ package com.example.car_project;
 import android.graphics.drawable.Drawable;
 
 public class ListViewItem {
-    private Drawable iconDrawable;
+    private String phoneNum;
     private String userName;
-    private String authority;
 
-    public void setIconDrawable(Drawable icon){
-        iconDrawable = icon;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    public void setUserName(String name){
-        userName = name;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setAuthority(String authority){
-        this.authority = authority;
+    public String getPhoneNum() {
+        return phoneNum;
     }
 
-    public Drawable getIcon(){
-        return this.iconDrawable;
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum;
     }
 
-    public String getUserName(){
-        return this.userName;
-    }
 
-    public String getAuthority(){
-        return this.authority;
-    }
 }

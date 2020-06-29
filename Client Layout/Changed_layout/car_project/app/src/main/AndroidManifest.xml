@@ -3,15 +3,16 @@
     package="com.example.car_project">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        >
-        <activity android:name=".CarSelect"></activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".Car_func_user"></activity>
+        <activity android:name=".CarSelect" />
         <activity android:name=".car_func" />
         <activity android:name=".SignUp" />
         <activity android:name=".MainActivity">

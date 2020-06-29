@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class ListViewAdapter extends BaseAdapter {
-    private ArrayList<ListViewItem> listViewItemList = new ArrayList<>();
+    private ArrayList<ListViewItem> userList = new ArrayList<>();
 
     public ListViewAdapter(){
 
@@ -22,7 +22,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public int getCount(){
-        return listViewItemList.size();
+        return userList.size();
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
@@ -32,17 +32,14 @@ public class ListViewAdapter extends BaseAdapter {
         if(convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.listview_item, parent, false);
-            //   convertView = View.inflate(context, R.layout.listview_item, parent);
         }
 
-        ImageView iconImageView = convertView.findViewById(R.id.listImg);
-        TextView userNameView = convertView.findViewById(R.id.listUser);
-        TextView authorView = convertView.findViewById(R.id.listAut);
+        TextView userName = convertView.findViewById(R.id.tv_userName);
+        TextView phone = convertView.findViewById(R.id.tv_phone);
 
-        ListViewItem listViewItem = listViewItemList.get(position);
-        iconImageView.setImageDrawable(listViewItem.getIcon());
-        userNameView.setText(listViewItem.getUserName());
-        authorView.setText(listViewItem.getAuthority());
+        ListViewItem listviewItem = userList.get(position);
+        userName.setText(listviewItem.getUserName());
+        phone.setText(listviewItem.getPhoneNum());
 
         return convertView;
     }
@@ -54,17 +51,15 @@ public class ListViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        return listViewItemList.get(position);
+        return userList.get(position);
     }
 
-    public void addItem(Drawable icon, String name, String auth) {
+    public void addItem(String name, String phone) {
         ListViewItem item = new ListViewItem();
 
-        item.setIconDrawable(icon);
         item.setUserName(name);
-        item.setAuthority(auth);
+        item.setPhoneNum(phone);
 
-        listViewItemList.add(item);
+        userList.add(item);
     }
-
 }

@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -24,7 +25,6 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
     private FragmentTransaction ft;
     car_func_home carfr;
     car_func_setting setfr;
-    car_func_user userfr;
     car_func_mycar mycarfr;
 
     private Toast toast;
@@ -66,9 +66,8 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
 
             case R.id.nav_user:
                 // 사용자
-                userfr = new car_func_user();
-                fm.beginTransaction().replace(R.id.fragmentlayout, userfr).commitAllowingStateLoss();
-                break;
+                Intent intent = new Intent(this, Car_func_user.class);
+                startActivity(intent);
 
             case R.id.nav_mycar:
                 // 권한 관리

@@ -72,15 +72,6 @@ public class car_func_home extends Fragment implements ImageButton.OnClickListen
     @Override
     public void onClick(View v) {
 
-//        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED) {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,Manifest.permission.READ_EXTERNAL_STORAGE)) {
-//
-//            } else {
-//                ActivityCompat.requestPermissions(activity,
-//                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-//            }
-//        }
-
         switch(v.getId()){
             case R.id.videoBtn:
                 // 비디오 버튼 클릭 시
