@@ -108,6 +108,7 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
             case R.id.nav_user:
                 // 사용자
                 Intent intent = new Intent(car_func.this, car_func_user.class);
+                intent.putExtra("UserID",user.getUserID());
                 startActivity(intent);
                 break;
 
