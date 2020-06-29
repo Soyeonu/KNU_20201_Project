@@ -8,11 +8,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -71,12 +74,11 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
     RelativeLayout airconLayout;
     RelativeLayout seatLayout;
     String recvMessage;
+    int airconCondition=0;
 
     ////////////////// 테스트용
-    EditText editText;
     TextView seatText;
     TextView tempText;
-    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,22 +99,14 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
         seatLayout = findViewById(R.id.seatLayout);
         seatLayout.setOnClickListener(this);
 
-        editText = findViewById(R.id.edit);
         seatText = findViewById(R.id.seatText);
         tempText = findViewById(R.id.tempText);
-        button = findViewById(R.id.btn);
-        button.setOnClickListener(this);
 
-        /*ImageButton preferences = findViewById(R.id.preferenceBtn);
-        preferences.setOnClickListener(new ImageButton.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                //Intent change
-            }
-        });*/
 
-        //fb_msg_listener();        //사용자로부터 메시지 수신 리스너
-        new Thread(new ConnectThread("192.168.4.1", 80)).start();
+        fb_msg_listener();        //사용자로부터 메시지 수신 리스너
+
+        //AT+CIFSR에서 나오는 IP주소를 입력해야 함
+        new Thread(new ConnectThread("192.168.0.7", 333)).start();
     }
 
     public void UpdateTimeMethod(){
@@ -153,22 +147,39 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
             case R.id.videoLayout:
                 break;
             case R.id.airconLayout:
-                break;
-            case R.id.btn:
-                String message = editText.getText().toString();
-                Log.d("MSG",message);
-                if(message.length() > 0)
+                if(airconCondition == 0)
                 {
-                    if(!isConnected){
-                        showErrorDialog("서버접속바람");
-                    }
-                    else
+                    String message = "TEMP_ON/0\n";
+                    if(message.length() > 0)
                     {
-                        new Thread(new SenderThread(message)).start();
-                        editText.setText(" ");
+                        if(!isConnected){
+                            showErrorDialog("서버접속바람");
+                        }
+                        else
+                        {
+                            new Thread(new SenderThread(message)).start();
+                            airconCondition = 1;
+                        }
+
+                    }
+                }
+                else
+                {
+                    String message = "TEMP_OFF/0\n";
+                    if(message.length() > 0)
+                    {
+                        if(!isConnected){
+                            showErrorDialog("서버접속바람");
+                        }
+                        else
+                        {
+                            new Thread(new SenderThread(message)).start();
+                            airconCondition=0;
+                        }
                     }
                 }
                 break;
+
         }
     }
 
@@ -184,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                System.out.println("Listener Triggered");
+                Log.d("-------", "Listen");
                 System.out.println(dataSnapshot.toString());
                 //msg가 아두이노로 보내는 메세지
                 String msg = dataSnapshot.child("Msg").getValue().toString();
@@ -205,10 +216,8 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
                             if(!isConnected){
                                 showErrorDialog("서버접속바람");
                             }
-                            else
-                            {
-                                new Thread(new SenderThread(msg)).start();
-                                editText.setText(" ");
+                            else {
+                                new Thread(new SenderThread(msg + "/25\n")).start();
                             }
                         }
                         break;
@@ -221,10 +230,20 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
                             }
                             else
                             {
-                                new Thread(new SenderThread(msg)).start();
-                                editText.setText(" ");
+                                new Thread(new SenderThread(msg+"/"+val_str+"\n")).start();
                             }
                         }
+                        break;
+                    case "REG_REQ":
+                        Log.d("******","Welcome~");
+                        AcceptDialog dialog = new AcceptDialog(MainActivity.this);
+                        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                        lp.copyFrom(dialog.getWindow().getAttributes());
+                        lp.width = 1200;
+                        lp.height = 1500;
+                        dialog.show();
+                        Window window = dialog.getWindow();
+                        window.setAttributes(lp);
                         break;
                 }
 
@@ -317,19 +336,18 @@ public class MainActivity extends AppCompatActivity implements RelativeLayout.On
                             @Override
                             public void run() {
                                 //여기서 클라이언트한테 값 전달
+
                                 //지금은 마스터로 보내놨음
                                 //원한다면 마스터에서 줍줍 가능~
-                                if(recvMessage.equals("ON\n"))
+                                if(recvMessage.equals("ON!"))
                                 {
                                     tempText.setText(recvMessage);
-                                    airconLayout.setBackgroundColor(Color.BLUE);//근데 이거 색 왜 안 바뀜?ㅡㅡ
                                 }
-                                else if(recvMessage.equals("OFF\n"))
+                                else if(recvMessage.equals("OFF!"))
                                 {
                                     tempText.setText(recvMessage);
-                                    airconLayout.setBackgroundColor(Color.RED);//근데 이거 색 왜 안 바뀜?ㅡㅡ
                                 }
-                                else
+                                else //온도값 넘어오는 경우
                                 {
                                     tempText.setText(recvMessage);
                                 }
