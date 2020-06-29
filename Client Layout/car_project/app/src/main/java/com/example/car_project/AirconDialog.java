@@ -16,6 +16,7 @@ package com.example.car_project;
         import android.widget.Switch;
         import android.widget.TextView;
         import android.widget.Toast;
+        import android.widget.ToggleButton;
 
         import com.example.car_project.Tools.URLManager;
 
@@ -68,6 +69,16 @@ public class AirconDialog extends Dialog {
         Button temp_down = findViewById(R.id.temp_downBtn);
         temp_up.setOnClickListener(btnClickListener);
         temp_down.setOnClickListener(btnClickListener);
+
+        final ToggleButton airconBtn = findViewById(R.id.airconToggleBtn);
+        airconBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = airconBtn.isChecked();
+
+                System.out.println(on);
+            }
+        });
 
         Button saveBtn = findViewById(R.id.airconOkBtn);
         saveBtn.setOnClickListener(new View.OnClickListener() {

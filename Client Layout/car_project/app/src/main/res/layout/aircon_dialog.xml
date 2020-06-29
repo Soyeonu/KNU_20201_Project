@@ -15,8 +15,30 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.2"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintVertical_bias="0.2"
+        />
+
+    <TextView
+        android:id="@+id/tv_currentTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="32"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tv_current"
+        app:layout_constraintLeft_toRightOf="@id/tv_current"
+        android:layout_marginHorizontal="20dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="°C"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@id/tv_currentTemp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_currentTemp"
         />
 
     <TextView
@@ -119,6 +141,22 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintHorizontal_bias="0.8"
+        app:layout_constraintVertical_bias="0.9"
+        />
+
+    <ToggleButton
+        android:id="@+id/airconToggleBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_btn"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.3"
         app:layout_constraintVertical_bias="0.9"
         />
 

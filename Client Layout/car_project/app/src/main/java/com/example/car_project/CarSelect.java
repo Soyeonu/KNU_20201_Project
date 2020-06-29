@@ -58,6 +58,7 @@ public class CarSelect extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 MasterIdDialog dialog = new MasterIdDialog(CarSelect.this);
+                dialog.setuid(uid);
                 WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
                 lp.copyFrom(dialog.getWindow().getAttributes());
                 lp.width = 800;
@@ -66,7 +67,14 @@ public class CarSelect extends AppCompatActivity {
                 Window window = dialog.getWindow();
                 window.setAttributes(lp);
 
+            }
+        });
 
+        Button refresh = findViewById(R.id.refreshBtn);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getRegListFromServer(uid);
             }
         });
     }
