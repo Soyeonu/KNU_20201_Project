@@ -140,5 +140,28 @@
         app:layout_constraintLeft_toRightOf="@id/text_phone"
         app:layout_constraintTop_toTopOf="@id/text_phone" />
 
+    <TextView
+        android:id="@+id/text_marterid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MasterID :"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@id/text_id"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.65" />
+
+
+    <EditText
+        android:id="@+id/master_input"
+        android:layout_width="255dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintLeft_toRightOf="@id/text_marterid"
+        app:layout_constraintTop_toTopOf="@id/text_marterid" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
