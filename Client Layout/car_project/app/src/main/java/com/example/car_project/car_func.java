@@ -240,9 +240,6 @@ public class car_func extends AppCompatActivity implements NavigationView.OnNavi
                     user.setName(json.getString("Name"));
                     user.setOwnMasterID(json.getString("OwnMasterID"));
 
-                    GlobalManager globalManager = (GlobalManager)getApplicationContext();
-                    globalManager.setState(user);
-
                     //drawer header의 내용 변경
                     TextView drawheader_Name = (TextView) findViewById(R.id.user_name);
                     TextView drawheader_Email = (TextView) findViewById(R.id.user_email);

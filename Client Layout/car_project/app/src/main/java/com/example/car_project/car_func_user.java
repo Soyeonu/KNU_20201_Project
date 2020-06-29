@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import Client_Information.User;
+
 public class car_func_user extends AppCompatActivity {
 
     @Override
@@ -22,10 +24,12 @@ public class car_func_user extends AppCompatActivity {
         TextView myEmail = findViewById(R.id.my_email);
         TextView myPhone = findViewById(R.id.my_phone);
 
-        myID.setText("My ID~");
-        myName.setText("My Name~");
-        myEmail.setText("My Email~");
-        myPhone.setText("My Phone~");
+        User user = new User();
+
+        myID.setText(user.getUserID());
+        myName.setText(user.getName());
+        myEmail.setText(user.getEmail());
+        myPhone.setText(user.getPhone());
 
         Button changePW = findViewById(R.id.changePW_btn);
         Button changeName = findViewById(R.id.changeName_btn);
@@ -45,15 +49,6 @@ public class car_func_user extends AppCompatActivity {
                 System.out.println("이름 변경");
                 ChangeNameDialog nameDialog = new ChangeNameDialog(car_func_user.this);
                 nameDialog.show();
-            }
-        });
-
-        Button ok = findViewById(R.id.user_okBtn);
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(car_func_user.this, car_func.class);
-                startActivity(intent);
             }
         });
     }

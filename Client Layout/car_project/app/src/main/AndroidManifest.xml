@@ -13,7 +13,6 @@
         <activity android:name=".car_func" />
         <activity android:name=".car_func_user"/>
         <activity android:name=".SignUp" />
-        <activity android:name=".mid_select" />
         <activity android:name=".CarSelect" />
         <activity android:name=".MainActivity">
             <intent-filter>

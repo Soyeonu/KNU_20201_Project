@@ -76,6 +76,7 @@ public class MasterIdDialog extends Dialog {    // 알림 활성, 비활성 창
     public void reg_req(String mid){
         Connection con = new Connection();
         con.setURL(URLManager.getUrl() + "regreq");
+        System.out.println(uid);
         con.execute(mid, uid, "REG_REQ");
     }
 
