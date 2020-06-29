@@ -1,20 +1,22 @@
 package com.example.car_project;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Adapter;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.car_project.Tools.URLManager;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -50,27 +52,23 @@ public class CarSelect extends AppCompatActivity {
 
         // adapter에 addItem( masterId, Owner name) 으로 리스트 뷰에 추가할 수 있습니다
         getRegListFromServer(uid);
-        //adapter.addItem("hello", "길동");
-        //adapter.addItem("no", "아니");
-        //adapter.addItem("bye", "잘가");
 
-        // 리스트뷰 클릭 리스너
-        /*
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button req_reg = findViewById(R.id.apply_regBtn);
+        req_reg.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+                MasterIdDialog dialog = new MasterIdDialog(CarSelect.this);
+                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+                lp.copyFrom(dialog.getWindow().getAttributes());
+                lp.width = 800;
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+                dialog.show();
+                Window window = dialog.getWindow();
+                window.setAttributes(lp);
 
-                // adapter.getItem(position)으로 listview안의 값을 가져 올 수 있음.
-                // 클릭한 리스트뷰 마스터 아이디 출력
-                System.out.println(((CarSelectListView)adapter.getItem(position)).getMasterId());
 
-                // Car func 액티비티로 이동
-                Intent intent = new Intent(CarSelect.this, car_func.class);
-                startActivity(intent);
             }
         });
-
-         */
     }
 
     @Override
@@ -186,6 +184,22 @@ public class CarSelect extends AppCompatActivity {
                         //등록된 차량이 없을 시
                         //이곳에 버튼을 선언하고 띄운 후 클릭 리스너도 만들어주면 됨
 
+                        ConstraintLayout layout = findViewById(R.id.carselect_layout);
+
+                        TextView text = new TextView(CarSelect.this);
+
+                        text.setText("등록된 차량이 없습니다");
+                        text.setTextSize(20);
+
+                        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(
+                                ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+                        lp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
+                        lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
+                        lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
+                        lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
+                        text.setLayoutParams(lp);
+
+                        layout.addView(text);
                         return;
                     }
 

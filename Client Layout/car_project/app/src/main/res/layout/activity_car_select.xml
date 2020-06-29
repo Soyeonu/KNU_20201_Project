@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".CarSelect">
+    tools:context=".CarSelect"
+    android:id="@+id/carselect_layout">
 
     <TextView
         android:id="@+id/text_ccis"
@@ -39,21 +40,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.25"
         />
-
     <ListView
         android:id="@+id/carSelect_listview"
         android:layout_width="350dp"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_bias="0.7"
+        app:layout_constraintVertical_bias="0.55"
         android:fastScrollEnabled="true"
         android:divider="#00000000"
         />
 
+    <Button
+        android:id="@+id/apply_regBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="등록 신청"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        android:background="@drawable/round_btn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.9"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
