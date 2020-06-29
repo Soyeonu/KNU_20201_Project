@@ -3,12 +3,9 @@ package com.example.car_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -188,36 +185,7 @@ public class CarSelect extends AppCompatActivity {
                     if(count == 0){
                         //등록된 차량이 없을 시
                         //이곳에 버튼을 선언하고 띄운 후 클릭 리스너도 만들어주면 됨
-		ConstraintLayout layout = findViewById(R.id.carselect_layout);
-                        Button btn = new Button(CarSelect.this);
 
-                        ConstraintLayout.LayoutParams lp = new ConstraintLayout.LayoutParams(
-                                ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-                        lp.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
-                        lp.endToEnd = ConstraintLayout.LayoutParams.PARENT_ID;
-                        lp.topToTop = ConstraintLayout.LayoutParams.PARENT_ID;
-                        lp.bottomToBottom = ConstraintLayout.LayoutParams.PARENT_ID;
-
-                        btn.setLayoutParams(lp);
-                        btn.setText("등록하기");
-                        btn.setTextColor(Color.WHITE);
-                        btn.setTextSize(20);
-                        btn.setBackgroundResource(R.drawable.round_btn);
-
-                        layout.addView(btn);
-                        btn.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                MasterIdDialog dialog = new MasterIdDialog(CarSelect.this);
-                                WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-                                lp.copyFrom(dialog.getWindow().getAttributes());
-                                lp.width = 800;
-                                lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
-                                dialog.show();
-                                Window window = dialog.getWindow();
-                                window.setAttributes(lp);
-                            }
-                        });
                         return;
                     }
 
