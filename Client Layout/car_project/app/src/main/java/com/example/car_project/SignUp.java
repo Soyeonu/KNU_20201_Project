@@ -87,7 +87,11 @@ public class SignUp extends AppCompatActivity {
             return;
         }
         if (email.equals("") || email == null) {
-            Toast.makeText(getApplicationContext(), "email을 채워주세요!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Email을 채워주세요!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!email.contains("@")) {
+            Toast.makeText(getApplicationContext(), "올바른 Email 형식이 아닙니다.", Toast.LENGTH_SHORT).show();
             return;
         }
         if (pw.equals("") || pw == null) {
@@ -95,6 +99,10 @@ public class SignUp extends AppCompatActivity {
             return;
         }
         //비밀번호 제약조건 추가
+        if (pw.length() < 5){
+            Toast.makeText(getApplicationContext(), "비밀번호는 5자리 이상이어야 합니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (name.equals("") || name == null) {
             Toast.makeText(getApplicationContext(), "이름을 채워주세요!", Toast.LENGTH_SHORT).show();
             return;
