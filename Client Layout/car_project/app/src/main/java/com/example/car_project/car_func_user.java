@@ -2,15 +2,33 @@ package com.example.car_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import Client_Information.User;
+
 public class car_func_user extends AppCompatActivity {
+
+    public User user = new User();
+    public static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +40,12 @@ public class car_func_user extends AppCompatActivity {
         TextView myEmail = findViewById(R.id.my_email);
         TextView myPhone = findViewById(R.id.my_phone);
 
-        myID.setText("My ID~");
-        myName.setText("My Name~");
-        myEmail.setText("My Email~");
-        myPhone.setText("My Phone~");
+        User user = new User();
+
+        myID.setText(user.getUserID());
+        myName.setText(user.getName());
+        myEmail.setText(user.getEmail());
+        myPhone.setText(user.getPhone());
 
         Button changePW = findViewById(R.id.changePW_btn);
         Button changeName = findViewById(R.id.changeName_btn);
@@ -48,13 +68,10 @@ public class car_func_user extends AppCompatActivity {
             }
         });
 
-        Button ok = findViewById(R.id.user_okBtn);
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(car_func_user.this, car_func.class);
-                startActivity(intent);
-            }
-        });
+        Intent intent;
+        String id;
+        id = getIntent().getExtras().getString("UserID");
+
+        mContext = this;
     }
 }
