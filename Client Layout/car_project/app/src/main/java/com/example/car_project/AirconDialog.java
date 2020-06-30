@@ -221,9 +221,14 @@ public class AirconDialog extends Dialog {
                 }
             }
             else{
+                String values[] = result.split("/");
                 TextView tv_temp;   // textview로 나타낸 온도
+                TextView tv_currentTemp;
                 tv_temp = findViewById(R.id.tv_temperature);
-                tv_temp.setText(result);
+                tv_currentTemp = findViewById(R.id.tv_currentTemp);
+
+                tv_currentTemp.setText(values[0]);
+                tv_temp.setText(values[1]);
             }
         }
 

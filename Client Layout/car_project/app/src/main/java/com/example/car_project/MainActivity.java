@@ -151,6 +151,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 catch (Exception e){
                     e.printStackTrace();
+                    Toast.makeText(getApplicationContext(), "서버와 통신 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show();
+
                 }
             }
             catch(Exception e){
