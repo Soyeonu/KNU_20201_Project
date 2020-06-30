@@ -2,17 +2,20 @@
 #include "DHT.h"
 
 
-#define rx 3
-#define tx 2
+#define rx 5
+#define tx 4
 #define DB true
-#define Buzzer 7
-#define Seat 12
+#define Buzzer 6
+#define Seat 10
 #define Temperature 8
-#define Reed 10
+#define Reed 3
+
 
 String income_wifi = "";
 int flag = 0;
 int SeatOrNot = 0;
+int SeatBelt = 0;
+int cnt = 0;
 
 SoftwareSerial esp(tx, rx);
 DHT dht(Temperature, 11);
@@ -20,10 +23,20 @@ DHT dht(Temperature, 11);
 
 void setup()
 {
-  Serial.begin(115200);
-  esp.begin(115200);
-  sendData("AT+CIPMUX=1\r\n", 1000, DB, ""); // configure for multiple connections
-  sendData("AT+CIPSERVER=1,80\r\n", 1000, DB, ""); // turn on server on port 80
+  Serial.begin(115200);   //시리얼모니터
+  esp.begin(115200);  //와이파이 시리얼
+  sendData("AT+CIPMUX=1\r\n", 1000, DB, ""); 
+
+  //현재 접속한 공유기 정보를 입력하셔야 합니다!
+  //SSID = 행갱갱
+  //PWD = 01030361070
+  String Connect = "AT+CWJAP=""\"행갱갱\""",""\"01030361070\"";
+  Connect = Connect+"\r\n";
+  sendData(Connect, 5000, DB, "");
+
+  //port 번호는 333으로 고정
+  String Port = "AT+CIPSERVER=1,333\r\n";
+  sendData(Port, 1000, DB, "");
 }
 
 void loop()
@@ -32,97 +45,78 @@ void loop()
   {
     if (flag == 0) //앱 실행과 동시에 좌석 및 안전벨트 착용 여부 확인
     {
-      String str = "";
-      delay(5000);
-      pinMode(Seat, INPUT_PULLUP);
-      if (digitalRead(12) == LOW)
-      {
-        str = "Sitting"; //앉아있는 경우
+      delay(3000);
+      pinMode(Seat, INPUT);
+      if (digitalRead(Seat) == LOW)
         SeatOrNot = 1;
-      }
-      else str = "No Sitting"; //앉아있지 않는 경우
-      str += "\r\n";
-      String cmd = "AT+CIPSEND=0,";
-      cmd += String(str.length()) + "\r\n";
-      sendData(cmd, 1000, DB, str);
+
+      Serial.println("Seat:" + String(SeatOrNot));
 
       if (SeatOrNot == 1)
       {
         pinMode(Reed, INPUT);
         pinMode(Buzzer, OUTPUT);
-        int val = digitalRead(10);
+        int val = digitalRead(Reed);
 
         delay(5000);
 
-        if (val == LOW)
+        if (val == LOW) //나중에 LOW로 바꿔야함
         {
-          String str = "Not Reed\r\n";
-          String cmd = "AT+CIPSEND=0,";
-          cmd += String(str.length()) + "\r\n";
-          sendData(cmd, 1000, DB, str);
-          tone(Buzzer, 500, 1000); 
+          SeatBelt = 0;
+          tone(Buzzer, 500, 1000);
           delay(1000);
         }
         else
         {
-          String str = "Reed\r\n";
-          String cmd = "AT+CIPSEND=0,";
-          cmd += String(str.length()) + "\r\n";
-          sendData(cmd, 1000, DB, str);
+          SeatBelt = 1;
         }
+        flag = 1;
       }
-
-      flag = 1;
     }
-
 
     if (flag == 1)
     {
       income_wifi = esp.readString();
       int first = income_wifi.indexOf(":");
-      String input = income_wifi.substring(first + 1);
-      Serial.println("From Master:" + income_wifi); //아두이노에 input이 있을 때 명령어 출력
-      Serial.println("Permission:" + input); //명령어만 골라서 출력
+      int second = income_wifi.indexOf("/");
+      int third = income_wifi.indexOf("\n");
+      String input = income_wifi.substring(first + 1, second);
+      String value = income_wifi.substring(second + 1,third);
+      Serial.println(income_wifi); //input 명령어 출력
 
 
-      if (input.equals("TEMP_CHK\n")) //온습도 센서에서 온도값을 넘김
+      if (input.equals("TEMP_CHK")) //온습도 센서에서 온도값을 넘김
       {
         int t = dht.readTemperature();
-        String str = String(t);
-        str += "deg\r\n";
+        String str = String(t)+"\r\n";
         String cmd = "AT+CIPSEND=0,";
         cmd += String(str.length()) + "\r\n";
         sendData(cmd, 1000, DB, str);
       }
 
-      else if (input.equals("TEMP_ON\n")) //에어컨 = LED 전구
+      else if (input.equals("TEMP_ON")) //에어컨 = LED 전구
       {
-        Serial.println("에어컨을 켜주세요!");
+        Serial.print("에어컨을 켜주세요\r\n");
+        String str = "ON!";
+        String cmd = "AT+CIPSEND=0,";
+        cmd += String(str.length()) + "\r\n";
+        sendData(cmd, 1000, DB, str);
+
+      }
+      else if (input.equals("TEMP_OFF"))
+      {
+        Serial.print("에어컨을 꺼주세요\n");
+        String str = "OFF!";
+        String cmd = "AT+CIPSEND=0,";
+        cmd += String(str.length()) + "\r\n";
+        sendData(cmd, 1000, DB, str);
       }
 
-      else if (input.equals("TEMP_OFF\n"))
+      else if (input.equals("TEMP_DST"))
       {
-        Serial.println("에어컨을 꺼주세요!");
+        Serial.println("현재 지정한 온도는 " + value + " 입니다.");
       }
-
-
-      else if (input.equals("TEMP_TUP\n"))
-      {
-        //value값까지 온도 올리기
-      }
-      else if (input.equals("TEMP_TDN\n"))
-      {
-        //value값까지 온도 낮추기
-      }
-      else if (input.equals("TEMP_DST\n"))
-      {
-        //온습도 센서값이 value가 되면 LED 끄기
-      }
-
-      
     }
-
-    
   }
 }
 
@@ -131,7 +125,7 @@ String sendData(String command, const int timeout, boolean debug, String s)
 {
   int exit_flag = 0;
   String response = "";
-  esp.println(command); //와이파이 모듈에게 AT cmd 전달
+  esp.print(command); //와이파이 모듈에게 AT cmd 전달
   long int time = millis();
 
   while (exit_flag == 0 && (time + timeout) > millis()) {
@@ -140,6 +134,7 @@ String sendData(String command, const int timeout, boolean debug, String s)
       if (c == '>')
       {
         exit_flag = 1;
+        Serial.print(s);
         esp.print(s);
         break;
       }

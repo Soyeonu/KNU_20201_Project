@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="600dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/masterId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="사용자 teet 의"
+        android:textSize="30sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        />
+
+
+
+    <TextView
+        android:id="@+id/link"
+        android:layout_width="500dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="등록을 수락하시겠습니까?"
+        android:textSize="25sp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:id="@+id/okBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="예"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/round_btn"
+            />
+
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            />
+
+        <Button
+            android:id="@+id/cancelBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="아니오"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:background="@drawable/round_btn"
+            />
+    </LinearLayout>
+
+</LinearLayout>
